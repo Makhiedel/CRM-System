@@ -1,36 +1,32 @@
 import { useState } from "react";
 
-export default function TaskCreation({updateTasks}) {
+export default function TaskCreation({ updater }) {
   const url = "https://easydev.club/api/v1/todos";
-  const [taskName, setTaskName] = useState('Empty');
-  const [isTaskCreated, setTaskCreated] = useState(false);
-  
+  const [taskName, setTaskName] = useState("Empty");
+
   const UserData = {};
   function handleTaskName(event) {
     setTaskName(event.target.value);
   }
-
-  if (isTaskCreated) {
-    setTaskCreated(false);
+  
+  async function handleTaskCreation() {
+    UserData.isDone = false;
     UserData.title = taskName;
-    async function createTask() {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(UserData),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to add");
-      } else {console.log(`"${taskName}" task created`);}
-      const data = await response.json();
-      updateTasks(); //updating list
-      return data;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(UserData),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to add");
+    } else {
+      console.log(`"${taskName}" task created`);
+      updater();
     }
-    createTask();
-    
   }
+  
 
   return (
     <>
@@ -41,7 +37,7 @@ export default function TaskCreation({updateTasks}) {
           placeholder="Task to be done..."
           required
         />
-        <button onClick={() => setTaskCreated(true)}>Add</button>
+        <button onClick={() => handleTaskCreation()}>Add</button>
       </div>
     </>
   );
