@@ -1,68 +1,138 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
+@import "tailwindcss";
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  background-color: rgb(60, 60, 60);
+  text-align: center;
+  font-family: Verdana;
+  font-size: 1rem;
+  color: rgb(24, 24, 24);
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.main-container {
+  background-color: rgb(218, 223, 228);
+  min-height: 40rem;
+  width: 100%;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+.selection-holder{
+  display: inline-flex;
+  font-size: 2rem;
+  width: 80%;
+}
+
+.selection-holder p {
+  width: 100%;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.selection-holder p:hover {
+  width: 100%;
+  cursor: pointer;
+  text-decoration:underline;
+}
+
+.task-holder {
+  border-radius: 12px;
+  background-color:aliceblue;
+  margin: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  display: inline-flex;
+  width: 80%;
+  
+}
+
+.task-holder p {
+  width: 100%;
+  text-align: left;
+  padding-left: 1rem;
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: large;
+}
+
+.task-holder .checkbox {
+  width: 2rem;
+  margin-left: 2rem;
+
+}
+
+.task-holder input {
+  width: 100%;
+  text-align: left;
+  padding-left: 1rem;
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: large;
+}
+
+.task-holder button {
+  
+  width: 10rem;
+  margin-left: 1rem;
+  margin-right: 2rem;
+  background-color: rgb(152, 228, 228);
+  border-radius: 5px;
+}
+
+.task-holder button:hover {
+  
+  width: 10rem;
+  margin-left: 1rem;
+  margin-right: 2rem;
+  background-color:rgb(118, 250, 250);
+  cursor: pointer;
+}
+
+.task-holder button:active {
+  
+  width: 10rem;
+  margin-left: 1rem;
+  margin-right: 2rem;
+  background-color:rgb(114, 149, 253);
+  cursor: pointer;
+}
+
+.task-creator {
+  background-color:aliceblue;
+  margin: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  display: inline-flex;
+  width: 80%;
+}
+
+.task-creator input {
+  width: 100%;
+  text-align: left;
+  padding-left: 1rem;
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: large;
+  margin-left: 2rem;
+  border-bottom: 1px solid;
+}
+
+.task-creator button {
+  width: 5rem;
+  margin-left: 1rem;
+  margin-right: 2rem;
+  background-color:rgb(152, 228, 228);
+  border-radius: 5px;
+}
+
+.task-creator button:hover {
+  width: 5rem;
+  margin-left: 1rem;
+  margin-right: 2rem;
+  background-color:rgb(118, 250, 250);
+  cursor: pointer;
+}
+
+.task-creator button:active {
+  width: 5rem;
+  margin-left: 1rem;
+  margin-right: 2rem;
+  background-color:rgb(114, 149, 253);
+  cursor: pointer;
 }
