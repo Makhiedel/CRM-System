@@ -2,14 +2,15 @@ import { useState } from "react";
 
 export default function TaskCreation({ updater }) {
   const url = "https://easydev.club/api/v1/todos";
-  const [taskName, setTaskName] = useState("Empty");
+  const [taskName, setTaskName] = useState();
 
   const UserData = {};
   function handleTaskName(event) {
     setTaskName(event.target.value);
   }
-  
-  async function handleTaskCreation() {
+
+  async function handleTaskCreation(event) {
+    event.preventDefault(); //to prevnt reloading after form submission
     UserData.isDone = false;
     UserData.title = taskName;
     const response = await fetch(url, {
@@ -22,27 +23,28 @@ export default function TaskCreation({ updater }) {
     if (!response.ok) {
       throw new Error("Failed to add");
     } else {
+      alert(`"${taskName}" task has created!`);
       console.log(`"${taskName}" task created`);
       updater();
     }
   }
-  
 
   return (
     <>
-      <div className="task-creator">
+      <form className="task-creator" onSubmit={handleTaskCreation} >
         <input
+          className="input"
           onChange={handleTaskName}
           type="text"
           placeholder="Task to be done..."
-          required
+          required={true}
+          minLength={2}
+          maxLength={64}
         />
-        <button onClick={() => handleTaskCreation()}>Add</button>
-      </div>
+        <button className="button">Add</button>
+      </form>
     </>
   );
 }
 
-//remaining features:
-//task succesfull creation alert/message
-//input validation (min 2, max 64), required
+//renaining feature: clearing input after creating task
