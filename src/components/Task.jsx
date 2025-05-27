@@ -92,6 +92,7 @@ export default function Task({
     setSelectedLine(""); //unhiglight input
     setEditing(false);
     setInputDisabled(true);
+    setNewTitle(oldTitle); //refresh title changes
   }
 
   return (

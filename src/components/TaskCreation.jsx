@@ -23,9 +23,10 @@ export default function TaskCreation({ updater }) {
     if (!response.ok) {
       throw new Error("Failed to add");
     } else {
-      alert(`"${taskName}" task has created!`);
+      // alert(`"${taskName}" task has created!`); //money first - featu
       console.log(`"${taskName}" task created`);
       updater();
+      setTaskName('');
     }
   }
 
@@ -40,6 +41,7 @@ export default function TaskCreation({ updater }) {
           required={true}
           minLength={2}
           maxLength={64}
+          value={taskName}
         />
         <button className="button">Add</button>
       </form>
@@ -47,4 +49,4 @@ export default function TaskCreation({ updater }) {
   );
 }
 
-//renaining feature: clearing input after creating task
+//remaining feature: clearing input after creating task
