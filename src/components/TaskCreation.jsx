@@ -48,5 +48,3 @@ export default function TaskCreation({ updater }) {
     </>
   );
 }
-
-//remaining feature: clearing input after creating task

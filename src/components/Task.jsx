@@ -27,6 +27,7 @@ export default function Task({
   }
 
   function handleTitleChange(event) {
+    event.preventDefault(); //to prevnt reloading after form submission
     setNewTitle(event.target.value);
     // console.log();
   }
@@ -110,18 +111,24 @@ export default function Task({
           <button onClick={() => handleDeleteTask(id, title)}>Delete</button>
         </>
       ) : (
-        <>
+        <form className="task-form" onSubmit={() => handleNewTitle(false, id)}>
           <input
-            className={selectedLine}
+            className={`${selectedLine} p`}
             type="text"
             defaultValue={newTitle}
             onChange={handleTitleChange}
             disabled={isInputDisabled}
+            required={true}
+            minLength={2}
+            maxLength={64}
           />
-          <button onClick={() => handleNewTitle(false, id)}>Save</button>
-          <button onClick={() => handleCancel()}>Cancel</button>
-        </>
+          <input type="submit" className="btn" value="Save" />
+          <input type="button" className="btn" onClick={() => handleCancel()} value="Cancel" />
+        </form>
       )}
     </div>
   );
 }
+
+//add styling to the form
+//fix filtration
