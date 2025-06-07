@@ -1,36 +1,32 @@
 import { useState, useEffect } from "react";
 
-export default function Selection({ updater, dataArray }) {
+export default function Selection({ updater, updateDone, updateInWork, taskCounter, state, currentPage }) {
   const [all, setAll] = useState();
   const [completed, setCompleted] = useState();
   const [inWork, setInWork] = useState();
 
-  async function deriveData() {
-    const response = await fetch("https://easydev.club/api/v1/todos");
-    const data = await response.json();
-    setAll(data.info.all);
-    setCompleted(data.info.completed);
-    setInWork(data.info.inWork);
-  }
-
-  async function handleDervieInWorkTasks() {
-    const initArray = await dataArray();
-    const filteredArray = await initArray.map(({ title, id, isDone }) => (
-        {ID:id, TITLE:title, STATUS:isDone}
-    ));
-    console.log(filteredArray)
+  async function handleTaskCounterDisplay() {
+    const tasks = await taskCounter();
+    setAll(tasks[0]);
+    setInWork(tasks[2]);
+    setCompleted(tasks[1]);
   }
 
   useEffect(() => {
-    deriveData();
-  }, []);
-
+    // deriveData();
+    handleTaskCounterDisplay();
+  }, [state]);
+  
+  
   return (
     <>
       <div className="selection-holder">
-        <p onClick={updater}>All ({all})</p>
-        <p onClick={handleDervieInWorkTasks}>In progress ({inWork})</p>
-        <p>Done ({completed})</p>
+        {currentPage === 0 ? <p className="selected" onClick={()=>updater()}>All ({all})</p>
+        :<p onClick={()=>updater()}>All ({all})</p>} 
+        {currentPage === 1 ? <p className="selected" onClick={()=>updateInWork()}>In progress ({inWork})</p>
+        :<p onClick={updateInWork}>In progress ({inWork})</p>}
+        {currentPage === 2 ? <p className="selected" onClick={()=>updateDone()}>Done ({completed})</p>
+        :<p onClick={updateDone}>Done ({completed})</p>}
       </div>
     </>
   );
