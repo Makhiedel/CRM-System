@@ -1,6 +1,11 @@
 import { useState } from "react";
 
-export default function TaskCreation({ updater }) {
+export default function TaskCreation({
+  updater,
+  updateDone,
+  updateInWork,
+  currentPage,
+}) {
   const url = "https://easydev.club/api/v1/todos";
   const [taskName, setTaskName] = useState();
 
@@ -25,14 +30,20 @@ export default function TaskCreation({ updater }) {
     } else {
       // alert(`"${taskName}" task has created!`); //money first - featu
       console.log(`"${taskName}" task created`);
-      updater();
-      setTaskName('');
+      if (currentPage === 0) {
+        updater(); //for all
+      } else if (currentPage === 1) {
+        updateInWork(); // for inWork
+      } else if (currentPage === 2) {
+        updateDone(); //for Done
+      }
+      setTaskName("");
     }
   }
 
   return (
     <>
-      <form className="task-creator" onSubmit={handleTaskCreation} >
+      <form className="task-creator" onSubmit={handleTaskCreation}>
         <input
           className="input"
           onChange={handleTaskName}

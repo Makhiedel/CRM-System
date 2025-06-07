@@ -31,6 +31,3 @@ export default function Selection({ updater, updateDone, updateInWork, taskCount
     </>
   );
 }
-
-
-//bugs: highlight selected filter

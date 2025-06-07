@@ -35,7 +35,8 @@ function App() {
     return helperArray;
   };
 
-  async function updateList(array = dataUpdater(), CurPage = 0) { // 1 param - filtered array of tasks, 2 param - filter number (page)
+  async function updateList(array = dataUpdater(), CurPage = 0) {
+    // 1 param - filtered array of tasks, 2 param - filter number (page)
     const dataArray = await array;
     // const isTheSame = dataArray.every(element => element.STATUS === dataArray[0].STATUS); //check if all elements with the same status
     // if (!isTheSame) {
@@ -45,7 +46,6 @@ function App() {
     // } else if (isTheSame && dataArray[0].STATUS) {
     //   page = 2; //third page
     // }
-
 
     const helperArray = await dataArray.map(({ ID, TITLE, STATUS }) => (
       <div key={ID}>
@@ -60,7 +60,7 @@ function App() {
         ></Task>
       </div>
     ));
-    
+
     setTasks(helperArray);
   }
 
@@ -81,7 +81,7 @@ function App() {
       }
     }
 
-    setPage(1)
+    setPage(1);
     updateList(filteredArray, 1);
   }
 
@@ -107,7 +107,12 @@ function App() {
   return (
     <>
       <div className="main-container">
-        <TaskCreation updater={updateList} />
+        <TaskCreation
+          updater={allTasks}
+          updateDone={doneTasks}
+          updateInWork={inWorkTasks}
+          currentPage={page}
+        />
         <Selection
           updater={allTasks}
           updateDone={doneTasks}
