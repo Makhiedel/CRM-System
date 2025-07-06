@@ -1,13 +1,8 @@
 import { useState } from "react";
+import { apiCreateTask } from "../api/api";
 
-export default function TaskCreation({
-  updater,
-  updateDone,
-  updateInWork,
-  currentPage,
-}) {
-  const url = "https://easydev.club/api/v1/todos";
-  const [taskName, setTaskName] = useState();
+export default function TaskCreation({ updater }) {
+  const [taskName, setTaskName] = useState("");
 
   const UserData = {};
   function handleTaskName(event) {
@@ -18,27 +13,10 @@ export default function TaskCreation({
     event.preventDefault(); //to prevnt reloading after form submission
     UserData.isDone = false;
     UserData.title = taskName;
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(UserData),
-    });
-    if (!response.ok) {
-      throw new Error("Failed to add");
-    } else {
-      // alert(`"${taskName}" task has created!`); //money first - featu
-      console.log(`"${taskName}" task created`);
-      if (currentPage === 0) {
-        updater(); //for all
-      } else if (currentPage === 1) {
-        updateInWork(); // for inWork
-      } else if (currentPage === 2) {
-        updateDone(); //for Done
-      }
-      setTaskName("");
-    }
+    await apiCreateTask(UserData);
+    console.log(`"${taskName}" task created`);
+    updater();
+    setTaskName(""); //useRef needed
   }
 
   return (

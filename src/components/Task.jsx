@@ -1,13 +1,16 @@
 import { useState } from "react";
+import { apiDeleteTask } from "../api/api";
+import { apiStatusChange } from "../api/api";
+import { apiTitleChange } from "../api/api";
 
 export default function Task({
   title,
   id,
   status,
   updater,
-  updateDone,
-  updateInWork,
-  currentPage,
+  // updateDone,
+  // updateInWork,
+  // currentPage,
 }) {
   const [isEditing, setEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
@@ -16,15 +19,15 @@ export default function Task({
   const [isDone, setIsDone] = useState(!status);
   const [selectedLine, setSelectedLine] = useState("");
 
-  function updaterHelper() {
-    if (currentPage === 0) {
-      updater(); //for all
-    } else if (currentPage === 1) {
-      updateInWork(); // for inWork
-    } else if (currentPage === 2) {
-      updateDone(); //for Done
-    }
-  }
+  // function updaterHelper() {
+  //   if (currentPage === 0) {
+  //     updater(); //for all
+  //   } else if (currentPage === 1) {
+  //     updateInWork(); // for inWork
+  //   } else if (currentPage === 2) {
+  //     updateDone(); //for Done
+  //   }
+  // }
 
   function handleTitleChange(event) {
     event.preventDefault(); //to prevnt reloading after form submission
@@ -37,30 +40,20 @@ export default function Task({
     const UserData = {};
     UserData.isDone = isDone;
     UserData.id = id;
-    fetch(`https://easydev.club/api/v1/todos/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(UserData),
-    }).then(() => {
-      updaterHelper();
-    });
+    await apiStatusChange(UserData);
+    // updaterHelper();
+    updater()
+    
   }
 
-  function handleNewTitle(isClicked, id) {
-    function handleEdit(id, TITLE) {
+  async function handleNewTitle(isClicked, id) {
+    async function handleEdit(id, TITLE) {
+      event.preventDefault();
       const UserData = {};
       UserData.title = TITLE;
       UserData.id = id;
       // console.log(UserData.TITLE);
-      fetch(`https://easydev.club/api/v1/todos/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(UserData),
-      });
+      await apiTitleChange(UserData);
       setOldTitle(TITLE); //saving old title in case of calncelling changes
     }
     if (isClicked) {
@@ -72,20 +65,16 @@ export default function Task({
       setSelectedLine(""); //unhighlight input
       console.log(`Task changed to ${newTitle}`);
       // updater(); // removed bc messing up filtration
-      handleEdit(id, newTitle);
+      await handleEdit(id, newTitle);
       setEditing(false);
       setInputDisabled(true);
     }
   }
 
   async function handleDeleteTask(id, TITLE) {
-    await fetch(`https://easydev.club/api/v1/todos/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    updaterHelper(); //refresh array
+    await apiDeleteTask(id);
+    // updaterHelper(); //refresh array
+    updater();
     console.log(`Task "${TITLE}" deleted`);
   }
 
@@ -130,5 +119,4 @@ export default function Task({
   );
 }
 
-//add styling to the form
-//fix filtration
+//implement useRef for input value
