@@ -1,8 +1,8 @@
 import { useState } from "react";
+import { apiCreateTask } from "../api/api";
 
 export default function TaskCreation({ updater }) {
-  const url = "https://easydev.club/api/v1/todos";
-  const [taskName, setTaskName] = useState();
+  const [taskName, setTaskName] = useState("");
 
   const UserData = {};
   function handleTaskName(event) {
@@ -13,25 +13,15 @@ export default function TaskCreation({ updater }) {
     event.preventDefault(); //to prevnt reloading after form submission
     UserData.isDone = false;
     UserData.title = taskName;
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(UserData),
-    });
-    if (!response.ok) {
-      throw new Error("Failed to add");
-    } else {
-      alert(`"${taskName}" task has created!`);
-      console.log(`"${taskName}" task created`);
-      updater();
-    }
+    await apiCreateTask(UserData);
+    console.log(`"${taskName}" task created`);
+    updater();
+    setTaskName(""); //useRef needed
   }
 
   return (
     <>
-      <form className="task-creator" onSubmit={handleTaskCreation} >
+      <form className="task-creator" onSubmit={handleTaskCreation}>
         <input
           className="input"
           onChange={handleTaskName}
@@ -40,11 +30,10 @@ export default function TaskCreation({ updater }) {
           required={true}
           minLength={2}
           maxLength={64}
+          value={taskName}
         />
         <button className="button">Add</button>
       </form>
     </>
   );
 }
-
-//renaining feature: clearing input after creating task
