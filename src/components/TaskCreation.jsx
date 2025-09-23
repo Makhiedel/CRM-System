@@ -1,22 +1,28 @@
 import { useState } from "react";
 import { apiCreateTask } from "../api/api";
+import { useEffect } from "react";
 
-export default function TaskCreation({ updater }) {
+export default function TaskCreation({ currentPage, setPage }) {
   const [taskName, setTaskName] = useState("");
 
+  const page = currentPage;
   const UserData = {};
   function handleTaskName(event) {
     setTaskName(event.target.value);
   }
 
+  function handleUpdate() {
+    setPage(page);
+  }
+
   async function handleTaskCreation(event) {
-    event.preventDefault(); //to prevnt reloading after form submission
+    event.preventDefault(); //to prevent reloading after form submission
     UserData.isDone = false;
     UserData.title = taskName;
     await apiCreateTask(UserData);
     console.log(`"${taskName}" task created`);
-    updater();
-    setTaskName(""); //useRef needed
+    handleUpdate();
+    setTaskName(""); 
   }
 
   return (

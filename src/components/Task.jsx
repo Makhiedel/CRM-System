@@ -40,7 +40,11 @@ export default function Task({
     const UserData = {};
     UserData.isDone = isDone;
     UserData.id = id;
-    await apiStatusChange(UserData);
+    try {
+      await apiStatusChange(UserData);
+    } catch (error) {
+      alert(`Failed to change status, ${error}`);
+    }
     // updaterHelper();
     updater()
     
@@ -53,7 +57,11 @@ export default function Task({
       UserData.title = TITLE;
       UserData.id = id;
       // console.log(UserData.TITLE);
-      await apiTitleChange(UserData);
+      try {
+        await apiTitleChange(UserData);
+      } catch (error) {
+        alert(`Failed to change title, ${error}`);
+      }
       setOldTitle(TITLE); //saving old title in case of calncelling changes
     }
     if (isClicked) {
@@ -72,7 +80,11 @@ export default function Task({
   }
 
   async function handleDeleteTask(id, TITLE) {
-    await apiDeleteTask(id);
+    try {
+      await apiDeleteTask(id);
+    } catch (error) {
+      alert(`Failed to delete task, ${error}`)
+    }
     // updaterHelper(); //refresh array
     updater();
     console.log(`Task "${TITLE}" deleted`);

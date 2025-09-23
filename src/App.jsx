@@ -1,28 +1,36 @@
 import { useState } from "react";
+import { useEffect } from "react";
 
 import "./App.css";
-import { apiCounters as taskCounterUpdater } from "./api/api";
+import { fetchTasks } from "./api/api";
 import TaskCreation from "./components/TaskCreation";
 import Selection from "./components/Selection";
 import TodoList from "./components/TodoList";
 
 function App() {
-  // let page = 0; //variable for current page of filtered tasks: 0 - all, 1 - inwork, 2 - done
-
   const tasksArray = [];
   const [tasks, setTasks] = useState(tasksArray);
   const [page, setPage] = useState(0);
-  const [update, setUpdate] = useState(0);
+  const [fetchedData, setFetchedData] = useState();
 
-  const updater = () => setUpdate((prev) => prev + 1); //update trigger
+  async function fetcher(param) {
+    console.log(param);
+    let data = await fetchTasks(param);
+    setFetchedData(data);
+    return data;
+  }
+
+  useEffect(() => {
+    // console.log('app.jsx executed');
+    // console.log(page);
+  }, [tasks]);
 
   return (
     <>
       <div className="main-container">
-        <TaskCreation updater={updater} />
+        <TaskCreation currentPage={page} setPage={setPage} />
         <Selection
-          updater={updater}
-          taskCounter={taskCounterUpdater}
+          taskCounter={fetchedData}
           state={tasks}
           currentPage={page}
           setPage={setPage}
@@ -31,7 +39,7 @@ function App() {
           tasks={tasks}
           setTasks={setTasks}
           page={page}
-          updater={update}
+          updater={fetcher}
         />
       </div>
     </>
