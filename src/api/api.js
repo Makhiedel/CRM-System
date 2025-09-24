@@ -50,14 +50,14 @@ export async function apiDeleteTask(id) {
   }
 }
 
-export async function apiStatusChange(userData) {
+export async function apiTodoChange(taskInfo) {
   try {
-    const response = await fetch(`https://easydev.club/api/v1/todos/${userData.id}`, {
+    const response = await fetch(`https://easydev.club/api/v1/todos/${taskInfo.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(userData),
+        body: JSON.stringify(taskInfo),
       })
     if (!response.ok) {
       throw new Error("Failed to change status");
@@ -66,23 +66,4 @@ export async function apiStatusChange(userData) {
     console.log(error.message);
     throw new Error(error.message);
   }
-}
-
-export async function apiTitleChange(userData) {
-  try {
-    const response = await fetch(`https://easydev.club/api/v1/todos/${userData.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
-    if (!response.ok) {
-      throw new Error("Failed to change the title");
-    }
-  } catch (error) {
-    console.log(error.message);
-    throw new Error(error.message);
-  }
-
 }

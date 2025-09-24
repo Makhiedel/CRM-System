@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { apiDeleteTask } from "../api/api";
-import { apiStatusChange } from "../api/api";
-import { apiTitleChange } from "../api/api";
+import { apiTodoChange } from "../api/api";
 
 export default function Task({
   title,
@@ -41,7 +40,7 @@ export default function Task({
     UserData.isDone = isDone;
     UserData.id = id;
     try {
-      await apiStatusChange(UserData);
+      await apiTodoChange(UserData);
     } catch (error) {
       alert(`Failed to change status, ${error}`);
     }
@@ -58,7 +57,7 @@ export default function Task({
       UserData.id = id;
       // console.log(UserData.TITLE);
       try {
-        await apiTitleChange(UserData);
+        await apiTodoChange(UserData);
       } catch (error) {
         alert(`Failed to change title, ${error}`);
       }
