@@ -27,30 +27,28 @@ export default function Selection({
   }, [state]);
 
   return (
-    <>
       <div className="selection-holder">
-        {currentPage === 0 ? (
-          <p className="selected" onClick={() => handleUpdate(0)}>
+        {currentPage === "all" ? (
+          <p className="selected" onClick={() => handleUpdate("all")}>
             All ({all})
           </p>
         ) : (
-          <p onClick={() => handleUpdate(0)}>All ({all})</p>
+          <p onClick={() => handleUpdate("all")}>All ({all})</p>
         )}
-        {currentPage === 1 ? (
-          <p className="selected" onClick={() => handleUpdate(1)}>
+        {currentPage === "inWork" ? (
+          <p className="selected" onClick={() => handleUpdate("inWork")}>
             In progress ({inWork})
           </p>
         ) : (
-          <p onClick={() => handleUpdate(1)}>In progress ({inWork})</p>
+          <p onClick={() => handleUpdate("inWork")}>In progress ({inWork})</p>
         )}
-        {currentPage === 2 ? (
-          <p className="selected" onClick={() => handleUpdate(2)}>
-            Done ({completed})
+        {currentPage === "completed" ? (
+          <p className="selected" onClick={() => handleUpdate("completed")}>
+            Done ({completed})s
           </p>
         ) : (
-          <p onClick={() => handleUpdate(2)}>Done ({completed})</p>
+          <p onClick={() => handleUpdate("completed")}>Done ({completed})</p>
         )}
       </div>
-    </>
   );
 }

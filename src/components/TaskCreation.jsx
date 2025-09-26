@@ -26,7 +26,6 @@ export default function TaskCreation({ currentPage, setPage }) {
   }
 
   return (
-    <>
       <form className="task-creator" onSubmit={handleTaskCreation}>
         <input
           className="input"
@@ -40,6 +39,5 @@ export default function TaskCreation({ currentPage, setPage }) {
         />
         <button className="button">Add</button>
       </form>
-    </>
   );
 }

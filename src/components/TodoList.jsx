@@ -7,7 +7,7 @@ export default function TodoList({ tasks, setTasks, page, updater }) {
   // const [page, setPage] = useState(0);
 
   async function updateList(array) {
-    // console.log(array);
+    console.log(array);
     const helperArray = await array.data.map(({ id, title, isDone }) => (
       <div key={id}>
         <Task
@@ -22,29 +22,18 @@ export default function TodoList({ tasks, setTasks, page, updater }) {
     setTasks(helperArray);
   }
 
-  async function updaterHelper() {
+  async function updaterHelper(filter) {
     try {
-      if (page === 0) {
-        const filteredArray = await updater("all");
-        console.log(0);
-        updateList(filteredArray);
-      } else if (page === 1) {
-        const filteredArray = await updater("inWork");
-        console.log(1);
-        updateList(filteredArray);
-      } else if (page === 2) {
-        const filteredArray = await updater("completed");
-        console.log(2);
-        updateList(filteredArray);
-      }
+      console.log(filter);
+      const filteredArray = await updater(filter);
+      updateList(filteredArray);
     } catch (error) {
       alert(`Failed to update, ${error}`);
     }
   }
 
   useEffect(() => {
-    console.log(page);
-    updaterHelper();
+    updaterHelper(page);
   }, [page]);
 
   return <>{tasks}</>;

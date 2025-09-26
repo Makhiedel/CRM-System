@@ -8,9 +8,8 @@ import Selection from "../components/Selection";
 import TodoList from "../components/TodoList";
 
 export default function Todo() {
-  const tasksArray = [];
-  const [tasks, setTasks] = useState(tasksArray);
-  const [page, setPage] = useState(0);
+  const [tasks, setTasks] = useState([]);
+  const [page, setPage] = useState("all");
   const [fetchedData, setFetchedData] = useState();
 
   async function fetcher(param) {
@@ -26,7 +25,6 @@ export default function Todo() {
   }, [tasks]);
 
   return (
-    <>
       <div className="main-container">
         <TaskCreation currentPage={page} setPage={setPage} />
         <Selection
@@ -42,6 +40,5 @@ export default function Todo() {
           updater={fetcher}
         />
       </div>
-    </>
   );
 }
