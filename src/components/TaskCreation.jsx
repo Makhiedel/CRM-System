@@ -1,19 +1,19 @@
 import { useState } from "react";
 import { apiCreateTask } from "../api/api";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 
-export default function TaskCreation({ currentPage, setPage }) {
+export default function TaskCreation({ currentPage, handleUpdate }) {
   const [taskName, setTaskName] = useState("");
 
-  const page = currentPage;
+  // const page = currentPage;
   const UserData = {};
   function handleTaskName(event) {
     setTaskName(event.target.value);
   }
 
-  function handleUpdate() {
-    setPage(page);
-  }
+  // function handleUpdate() {
+  //   setPage(page);
+  // }
 
   async function handleTaskCreation(event) {
     event.preventDefault(); //to prevent reloading after form submission
@@ -21,7 +21,7 @@ export default function TaskCreation({ currentPage, setPage }) {
     UserData.title = taskName;
     await apiCreateTask(UserData);
     console.log(`"${taskName}" task created`);
-    handleUpdate();
+    handleUpdate(currentPage);
     setTaskName(""); 
   }
 

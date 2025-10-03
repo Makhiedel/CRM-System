@@ -2,19 +2,18 @@ import Task from "./Task";
 import { useEffect } from "react";
 // import { fetchTasks } from "../api/api";
 
-export default function TodoList({ tasks, setTasks, page, updater }) {
-  // const [tasks, setTasks] = useState(tasksArray);
-  // const [page, setPage] = useState(0);
+export default function TodoList({ tasks, setTasks, page, updater, data }) {
 
   async function updateList(array) {
     console.log(array);
-    const helperArray = await array.data.map(({ id, title, isDone }) => (
+    const helperArray = await array.map(({ id, title, isDone }) => (
       <div key={id}>
         <Task
           id={id}
           title={title}
           status={isDone}
-          updater={updaterHelper}
+          updater={updater}
+          page={page}
         ></Task>
       </div>
     ));
@@ -22,19 +21,10 @@ export default function TodoList({ tasks, setTasks, page, updater }) {
     setTasks(helperArray);
   }
 
-  async function updaterHelper(filter) {
-    try {
-      console.log(filter);
-      const filteredArray = await updater(filter);
-      updateList(filteredArray);
-    } catch (error) {
-      alert(`Failed to update, ${error}`);
-    }
-  }
 
   useEffect(() => {
-    updaterHelper(page);
-  }, [page]);
+    updateList(data.data);
+  }, [data]);
 
   return <>{tasks}</>;
 }

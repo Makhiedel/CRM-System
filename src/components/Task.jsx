@@ -7,9 +7,7 @@ export default function Task({
   id,
   status,
   updater,
-  // updateDone,
-  // updateInWork,
-  // currentPage,
+  page,
 }) {
   const [isEditing, setEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
@@ -18,20 +16,10 @@ export default function Task({
   const [isDone, setIsDone] = useState(!status);
   const [selectedLine, setSelectedLine] = useState("");
 
-  // function updaterHelper() {
-  //   if (currentPage === 0) {
-  //     updater(); //for all
-  //   } else if (currentPage === 1) {
-  //     updateInWork(); // for inWork
-  //   } else if (currentPage === 2) {
-  //     updateDone(); //for Done
-  //   }
-  // }
 
   function handleTitleChange(event) {
     event.preventDefault(); //to prevnt reloading after form submission
     setNewTitle(event.target.value);
-    // console.log();
   }
 
   async function handleStatusChange() {
@@ -44,8 +32,7 @@ export default function Task({
     } catch (error) {
       alert(`Failed to change status, ${error}`);
     }
-    // updaterHelper();
-    updater()
+    updater(page);
     
   }
 
@@ -55,7 +42,6 @@ export default function Task({
       const UserData = {};
       UserData.title = TITLE;
       UserData.id = id;
-      // console.log(UserData.TITLE);
       try {
         await apiTodoChange(UserData);
       } catch (error) {
@@ -84,8 +70,7 @@ export default function Task({
     } catch (error) {
       alert(`Failed to delete task, ${error}`)
     }
-    // updaterHelper(); //refresh array
-    updater();
+    updater(page);
     console.log(`Task "${TITLE}" deleted`);
   }
 
@@ -130,4 +115,3 @@ export default function Task({
   );
 }
 
-//implement useRef for input value
