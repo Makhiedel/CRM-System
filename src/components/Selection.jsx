@@ -25,7 +25,6 @@ export default function Selection({
 
   useEffect(() => {
     console.log(taskCounter);
-    // handleUpdate();
     handleTaskCounterDisplay();
   }, [state]);
 

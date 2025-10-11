@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { apiDeleteTask } from "../api/api";
 import { apiTodoChange } from "../api/api";
+import { validator } from "../utils/validator";
 
 export default function Task({
   title,
@@ -38,16 +39,23 @@ export default function Task({
 
   async function handleNewTitle(isClicked, id) {
     async function handleEdit(id, TITLE) {
-      event.preventDefault();
       const UserData = {};
       UserData.title = TITLE;
       UserData.id = id;
-      try {
-        await apiTodoChange(UserData);
-      } catch (error) {
-        alert(`Failed to change title, ${error}`);
+      if 
+      (validator(TITLE))
+      {
+        try {
+          await apiTodoChange(UserData);
+          console.log(`Task changed to ${newTitle}`);
+        } catch (error) {
+          alert(`Failed to change title, ${error}`);
+        }
+        setOldTitle(TITLE); //saving old title in case of calncelling changes
       }
-      setOldTitle(TITLE); //saving old title in case of calncelling changes
+      else {
+        alert("Title should be 2-64 characters long!");
+      }
     }
     if (isClicked) {
       setSelectedLine("selected"); //highlight input
@@ -56,7 +64,7 @@ export default function Task({
     }
     if (!isClicked) {
       setSelectedLine(""); //unhighlight input
-      console.log(`Task changed to ${newTitle}`);
+      
       // updater(); // removed bc messing up filtration
       await handleEdit(id, newTitle);
       setEditing(false);
@@ -96,7 +104,7 @@ export default function Task({
           <button onClick={() => handleDeleteTask(id, title)}>Delete</button>
         </>
       ) : (
-        <form className="task-form" onSubmit={() => handleNewTitle(false, id)}>
+        <div className="task-form">
           <input
             className={`${selectedLine} p`}
             type="text"
@@ -104,12 +112,10 @@ export default function Task({
             onChange={handleTitleChange}
             disabled={isInputDisabled}
             required={true}
-            minLength={2}
-            maxLength={64}
           />
-          <input type="submit" className="btn" value="Save" />
+          <input type="button" className="btn" value="Save" onClick={() => handleNewTitle(false, id)}/>
           <input type="button" className="btn" onClick={() => handleCancel()} value="Cancel" />
-        </form>
+        </div>
       )}
     </div>
   );

@@ -1,43 +1,46 @@
 import { useState } from "react";
 import { apiCreateTask } from "../api/api";
-// import { useEffect } from "react";
+import { validator } from "../utils/validator"
 
 export default function TaskCreation({ currentPage, handleUpdate }) {
   const [taskName, setTaskName] = useState("");
+  const [isValid, setValid] = useState(false);
 
-  // const page = currentPage;
   const UserData = {};
   function handleTaskName(event) {
     setTaskName(event.target.value);
+    setValid(false);
   }
 
-  // function handleUpdate() {
-  //   setPage(page);
-  // }
 
-  async function handleTaskCreation(event) {
-    event.preventDefault(); //to prevent reloading after form submission
-    UserData.isDone = false;
-    UserData.title = taskName;
-    await apiCreateTask(UserData);
-    console.log(`"${taskName}" task created`);
-    handleUpdate(currentPage);
-    setTaskName(""); 
+  async function setSubmit() {
+    const UserData = {isDone: false, title: taskName}
+    if (
+      validator(taskName)
+    ) {
+      await apiCreateTask(UserData);
+      console.log(`"${taskName}" task created`);
+      handleUpdate(currentPage);
+      setTaskName("");
+    } else {
+      setValid(true);
+      setTaskName("");
+    }
   }
 
   return (
-      <form className="task-creator" onSubmit={handleTaskCreation}>
-        <input
-          className="input"
-          onChange={handleTaskName}
-          type="text"
-          placeholder="Task to be done..."
-          required={true}
-          minLength={2}
-          maxLength={64}
-          value={taskName}
-        />
-        <button className="button">Add</button>
-      </form>
+    <div className="task-creator">
+      <div className="task-creator-row">
+      <input
+
+        onChange={handleTaskName}
+        type="text"
+        placeholder="Task to be done..."
+        value={taskName}
+      />
+      <button onClick={setSubmit}>Add</button>
+      </div>
+      {isValid ? (<p className="text">Text should be 2-64 characters long!</p>) : (<p></p>)}
+    </div>
   );
 }

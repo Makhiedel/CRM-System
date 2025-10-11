@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useEffect } from "react";
 
-import "../App.css";
 import { fetchTasks } from "../api/api";
 import TaskCreation from "../components/TaskCreation";
 import Selection from "../components/Selection";
@@ -12,6 +11,11 @@ export default function Todo() {
   const [page, setPage] = useState("all");
   const [fetchedData, setFetchedData] = useState({});
 
+
+  // async function fetcher(param) {
+  //   setPage(param);
+  // }
+  
   async function fetcher(param) {
     try {
       setPage(param);
@@ -23,25 +27,22 @@ export default function Todo() {
     }
     console.log(param);
   }
-
   useEffect(() => {
-    fetcher("all");
+
+    fetcher(page);
     console.log(fetchedData);
     console.log(tasks);
-  }, []);
+  }, [page]);
 
   return (
     <div className="main-container">
-      <TaskCreation
-        currentPage={page}
-        handleUpdate={fetcher}
-      />
+      <TaskCreation currentPage={page} handleUpdate={fetcher} />
       <Selection
         taskCounter={fetchedData}
         state={tasks}
         currentPage={page}
         setPage={setPage}
-        handleUpdate={fetcher}
+        handleUpdate={setPage}
       />
       <TodoList
         data={fetchedData}

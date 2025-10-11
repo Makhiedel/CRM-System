@@ -17,7 +17,7 @@ body {
 .selection-holder {
   display: inline-flex;
   font-size: 2rem;
-  width: 80%;
+  width: 70%;
 }
 
 .selection-holder p {
@@ -44,7 +44,7 @@ body {
   padding-top: 1rem;
   padding-bottom: 1rem;
   display: inline-flex;
-  width: 80%;
+  width: 60%;
 }
 
 .task-holder p {
@@ -107,14 +107,33 @@ body {
 
 .task-creator {
   background-color: aliceblue;
+  border-radius: 12px;
   margin: 1rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
-  display: inline-flex;
-  width: 80%;
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  place-self: center;
 }
 
-.task-creator .input {
+.task-creator-row {
+  display: flex;
+}
+
+.task-creator .text {
+  width: 100%;
+  text-align: left;
+  padding-left: 1rem;
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: large;
+  background-color: rgb(255, 99, 99);
+}
+
+.task-creator-row input {
+  display: flex;
+  flex: 1;
   width: 100%;
   text-align: left;
   padding-left: 1rem;
@@ -125,7 +144,7 @@ body {
   border-bottom: 1px solid;
 }
 
-.task-creator .button {
+.task-creator-row button {
   width: 5rem;
   margin-left: 1rem;
   margin-right: 2rem;
@@ -133,7 +152,7 @@ body {
   border-radius: 5px;
 }
 
-.task-creator .button:hover {
+.task-creator-row button:hover {
   width: 5rem;
   margin-left: 1rem;
   margin-right: 2rem;
@@ -141,7 +160,7 @@ body {
   cursor: pointer;
 }
 
-.task-creator .button:active {
+.task-creator-row button:active {
   width: 5rem;
   margin-left: 1rem;
   margin-right: 2rem;
@@ -150,7 +169,6 @@ body {
 }
 
 .task-form {
-
   background-color: aliceblue;
   margin: none;
   padding-top: none;
@@ -177,7 +195,6 @@ body {
   margin-right: 2rem;
   background-color: rgb(152, 228, 228);
   border-radius: 5px;
-
 }
 
 .task-form .btn {
