@@ -23,8 +23,8 @@ export default function TodoList({ tasks, setTasks, page, updater, data }) {
 
 
   useEffect(() => {
-    updateList(data.data);
-  }, [data]);
+    // updateList(data.data);
+  }, [tasks]);
 
   return <>{tasks}</>;
 }

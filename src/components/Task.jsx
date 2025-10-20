@@ -4,17 +4,18 @@ import { apiTodoChange } from "../api/api";
 import { validator } from "../utils/validator";
 
 export default function Task({
-  title,
-  id,
-  status,
+  // title,
+  // id,
+  // status,
+  task,
   updater,
-  page,
+  page
 }) {
   const [isEditing, setEditing] = useState(false);
-  const [newTitle, setNewTitle] = useState(title);
-  const [oldTitle, setOldTitle] = useState(title);
+  const [newTitle, setNewTitle] = useState(task.title);
+  const [oldTitle, setOldTitle] = useState(task.title);
   const [isInputDisabled, setInputDisabled] = useState(true);
-  const [isDone, setIsDone] = useState(!status);
+  const [isCompl, setIsDone] = useState(!task.isDone);
   const [selectedLine, setSelectedLine] = useState("");
 
 
@@ -26,8 +27,8 @@ export default function Task({
   async function handleStatusChange() {
     setIsDone((value) => !value);
     const UserData = {};
-    UserData.isDone = isDone;
-    UserData.id = id;
+    UserData.isDone = isCompl;
+    UserData.id = task.id;
     try {
       await apiTodoChange(UserData);
     } catch (error) {
@@ -39,14 +40,13 @@ export default function Task({
 
   async function handleNewTitle(isClicked, id) {
     async function handleEdit(id, TITLE) {
-      const UserData = {};
-      UserData.title = TITLE;
-      UserData.id = id;
+
+      const userData = {title:TITLE, id:id}
       if 
       (validator(TITLE))
       {
         try {
-          await apiTodoChange(UserData);
+          await apiTodoChange(userData);
           console.log(`Task changed to ${newTitle}`);
         } catch (error) {
           alert(`Failed to change title, ${error}`);
@@ -66,7 +66,7 @@ export default function Task({
       setSelectedLine(""); //unhighlight input
       
       // updater(); // removed bc messing up filtration
-      await handleEdit(id, newTitle);
+      await handleEdit(task.id, newTitle);
       setEditing(false);
       setInputDisabled(true);
     }
@@ -86,22 +86,22 @@ export default function Task({
     setSelectedLine(""); //unhiglight input
     setEditing(false);
     setInputDisabled(true);
-    setNewTitle(oldTitle); //refresh title changes
+    setNewTitle(oldTitle); //r  efresh title changes
   }
 
   return (
-    <div key={id} className="task-holder">
+    <div key={task.id} className="task-holder">
       <input
         className={"checkbox"}
         type="checkbox"
-        defaultChecked={status}
-        onChange={() => handleStatusChange(status, id)}
+        defaultChecked={task.status}
+        onChange={() => handleStatusChange(task.status, task.id)}
       />
       {!isEditing ? (
         <>
           <p className={selectedLine}>{oldTitle}</p>
-          <button onClick={() => handleNewTitle(true, id)}>Edit</button>
-          <button onClick={() => handleDeleteTask(id, title)}>Delete</button>
+          <button onClick={() => handleNewTitle(true, task.id)}>Edit</button>
+          <button onClick={() => handleDeleteTask(task.id, task.title)}>Delete</button>
         </>
       ) : (
         <div className="task-form">
@@ -113,7 +113,7 @@ export default function Task({
             disabled={isInputDisabled}
             required={true}
           />
-          <input type="button" className="btn" value="Save" onClick={() => handleNewTitle(false, id)}/>
+          <input type="button" className="btn" value="Save" onClick={() => handleNewTitle(false, task.id)}/>
           <input type="button" className="btn" onClick={() => handleCancel()} value="Cancel" />
         </div>
       )}

@@ -5,33 +5,41 @@ import { fetchTasks } from "../api/api";
 import TaskCreation from "../components/TaskCreation";
 import Selection from "../components/Selection";
 import TodoList from "../components/TodoList";
+import Task from "../components/Task";
 
 export default function Todo() {
-  const [tasks, setTasks] = useState([]);
-  const [page, setPage] = useState("all");
-  const [fetchedData, setFetchedData] = useState({});
-
+  const [tasks, setTasks] = useState([]); //tasks
+  const [page, setPage] = useState("all"); //query param for filtration
+  const [fetchedData, setFetchedData] = useState({}); //data for counters
 
   // async function fetcher(param) {
   //   setPage(param);
   // }
-  
+
   async function fetcher(param) {
     try {
       setPage(param);
       const data = await fetchTasks(param);
-      setFetchedData(data);
-      console.log(data);
+      const helperArray = await data.data.map((task) => (
+        <div key={task.id}>
+          <Task
+            task={task}
+            updater={fetcher}
+            page={page}
+          ></Task>
+        </div>
+      ));
+      setTasks(helperArray); //tasks deriving
+      setFetchedData(data); //counters
+      console.log(data.data);
     } catch (error) {
       alert(`Failed to update, ${error}`);
     }
     console.log(param);
   }
-  useEffect(() => {
 
+  useEffect(() => {
     fetcher(page);
-    console.log(fetchedData);
-    console.log(tasks);
   }, [page]);
 
   return (
