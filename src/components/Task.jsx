@@ -3,21 +3,13 @@ import { apiDeleteTask } from "../api/api";
 import { apiTodoChange } from "../api/api";
 import { validator } from "../utils/validator";
 
-export default function Task({
-  // title,
-  // id,
-  // status,
-  task,
-  updater,
-  page
-}) {
+export default function Task({ task, updater, page }) {
   const [isEditing, setEditing] = useState(false);
   const [newTitle, setNewTitle] = useState(task.title);
   const [oldTitle, setOldTitle] = useState(task.title);
   const [isInputDisabled, setInputDisabled] = useState(true);
   const [isCompl, setIsDone] = useState(!task.isDone);
   const [selectedLine, setSelectedLine] = useState("");
-
 
   function handleTitleChange(event) {
     event.preventDefault(); //to prevnt reloading after form submission
@@ -27,7 +19,7 @@ export default function Task({
   async function handleStatusChange() {
     setIsDone((value) => !value);
     const UserData = {};
-    UserData.isDone = isCompl;
+    UserData.isDone = task.isDone;
     UserData.id = task.id;
     try {
       await apiTodoChange(UserData);
@@ -35,16 +27,12 @@ export default function Task({
       alert(`Failed to change status, ${error}`);
     }
     updater(page);
-    
   }
 
   async function handleNewTitle(isClicked, id) {
     async function handleEdit(id, TITLE) {
-
-      const userData = {title:TITLE, id:id}
-      if 
-      (validator(TITLE))
-      {
+      const userData = { title: TITLE, id: id };
+      if (validator(TITLE)) {
         try {
           await apiTodoChange(userData);
           console.log(`Task changed to ${newTitle}`);
@@ -52,8 +40,7 @@ export default function Task({
           alert(`Failed to change title, ${error}`);
         }
         setOldTitle(TITLE); //saving old title in case of calncelling changes
-      }
-      else {
+      } else {
         alert("Title should be 2-64 characters long!");
       }
     }
@@ -64,7 +51,7 @@ export default function Task({
     }
     if (!isClicked) {
       setSelectedLine(""); //unhighlight input
-      
+
       // updater(); // removed bc messing up filtration
       await handleEdit(task.id, newTitle);
       setEditing(false);
@@ -76,7 +63,7 @@ export default function Task({
     try {
       await apiDeleteTask(id);
     } catch (error) {
-      alert(`Failed to delete task, ${error}`)
+      alert(`Failed to delete task, ${error}`);
     }
     updater(page);
     console.log(`Task "${TITLE}" deleted`);
@@ -101,7 +88,9 @@ export default function Task({
         <>
           <p className={selectedLine}>{oldTitle}</p>
           <button onClick={() => handleNewTitle(true, task.id)}>Edit</button>
-          <button onClick={() => handleDeleteTask(task.id, task.title)}>Delete</button>
+          <button onClick={() => handleDeleteTask(task.id, task.title)}>
+            Delete
+          </button>
         </>
       ) : (
         <div className="task-form">
@@ -113,11 +102,20 @@ export default function Task({
             disabled={isInputDisabled}
             required={true}
           />
-          <input type="button" className="btn" value="Save" onClick={() => handleNewTitle(false, task.id)}/>
-          <input type="button" className="btn" onClick={() => handleCancel()} value="Cancel" />
+          <input
+            type="button"
+            className="btn"
+            value="Save"
+            onClick={() => handleNewTitle(false, task.id)}
+          />
+          <input
+            type="button"
+            className="btn"
+            onClick={() => handleCancel()}
+            value="Cancel"
+          />
         </div>
       )}
     </div>
   );
 }
-
