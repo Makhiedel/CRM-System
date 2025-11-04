@@ -1,0 +1,23 @@
+.selectionholder {
+  display: inline-flex;
+  font-size: 2rem;
+  width: 70%;
+}
+
+.selectionholder p {
+  width: 100%;
+  cursor: pointer;
+}
+
+.selectionholder p:hover {
+  width: 100%;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.selected {
+  width: 100%;
+  cursor: pointer;
+  text-decoration: underline;
+}
+

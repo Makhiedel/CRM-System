@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { apiCreateTask } from "../api/api";
-import { validator } from "../utils/validator";
+import { apiCreateTask } from "../../api/api";
+import { validator } from "../../utils/validator";
 
-export default function TaskCreation({ currentPage, handleUpdate }) {
+import styles from './AddTask.module.css'
+
+export default function AddTask({ currentPage, handleUpdate }) {
   const [taskName, setTaskName] = useState("");
   const [isValid, setValid] = useState(false);
 
@@ -25,8 +27,8 @@ export default function TaskCreation({ currentPage, handleUpdate }) {
   }
 
   return (
-    <div className="task-creator">
-      <div className="task-creator-row">
+    <div className={styles.taskcreator}>
+      <div className={styles.taskcreatorrow}>
         <input
           onChange={handleTaskName}
           type="text"
@@ -36,7 +38,7 @@ export default function TaskCreation({ currentPage, handleUpdate }) {
         <button onClick={setSubmit}>Add</button>
       </div>
       {isValid ? (
-        <p className="text">Text should be 2-64 characters long!</p>
+        <p className={styles.errortext}>Text should be 2-64 characters long!</p>
       ) : (
         <p></p>
       )}

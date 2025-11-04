@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
+import styles from './Filter.module.css';
 
-export default function Selection({
+export default function TaskFilter({
   taskCounter,
   state,
   currentPage,
@@ -25,7 +26,7 @@ export default function Selection({
   function Selector({ currentPage, displayName, filter, quantity }) {
     return (
       <p
-        className={currentPage === filter ? "selected" : ""} 
+        className={currentPage === filter ? styles.selected : ""} //underline
         onClick={() => handleUpdate(filter)}
       >
         {displayName} ({quantity})
@@ -34,7 +35,7 @@ export default function Selection({
   }
 
   return (
-    <div className="selection-holder">
+    <div className={styles.selectionholder}>
       <Selector
         currentPage={currentPage}
         displayName={"All"}

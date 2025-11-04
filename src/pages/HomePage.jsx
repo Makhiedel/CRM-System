@@ -2,19 +2,15 @@ import { useState } from "react";
 import { useEffect } from "react";
 
 import { fetchTasks } from "../api/api";
-import TaskCreation from "../components/TaskCreation";
-import Selection from "../components/Selection";
-import TodoList from "../components/TodoList";
-import Task from "../components/Task";
+import AddTask from "../components/TaskCreation/AddTask";
+import TaskFilter from "../components/Selection/TaskFilter";
+import TodoList from "../components/TodoList/TodoList";
+import Task from "../components/Task/Task";
 
 export default function Todo() {
   const [tasks, setTasks] = useState([]); //tasks
   const [page, setPage] = useState("all"); //query param for filtration
   const [fetchedData, setFetchedData] = useState({}); //data for counters
-
-  // async function fetcher(param) {
-  //   setPage(param);
-  // }
 
   async function fetcher(param) {
     try {
@@ -44,8 +40,8 @@ export default function Todo() {
 
   return (
     <div className="main-container">
-      <TaskCreation currentPage={page} handleUpdate={fetcher} />
-      <Selection
+      <AddTask currentPage={page} handleUpdate={fetcher} />
+      <TaskFilter
         taskCounter={fetchedData}
         state={tasks}
         currentPage={page}

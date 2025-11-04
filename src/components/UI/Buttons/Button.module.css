@@ -1,0 +1,12 @@
+.editbutton {
+ color: grey; 
+}
+.delbutton {
+  color: red;
+}
+.savebutton {
+  color: green;
+}
+.cancelbutton {
+  color: blue;
+}
