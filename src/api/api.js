@@ -50,7 +50,7 @@ export async function apiDeleteTask(id) {
   }
 }
 
-export async function apiTodoChange(taskInfo) {
+export async function apiChangeTodo(taskInfo) {
   try {
     const response = await fetch(`https://easydev.club/api/v1/todos/${taskInfo.id}`, {
         method: "PUT",

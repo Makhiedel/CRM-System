@@ -1,21 +1,26 @@
 import { useState } from "react";
 import { apiDeleteTask } from "../../api/api";
-import { apiTodoChange } from "../../api/api";
+import { apiChangeTodo } from "../../api/api";
 import { validator } from "../../utils/validator";
 import Button from "../UI/Buttons/Button";
 import styles from "./Task.module.css";
 
 export default function Task({ task, updater, page }) {
-  const [isValid, setValid] = useState(true);
-  const [isEditing, setEditing] = useState(false);
-  const [newTitle, setNewTitle] = useState(task.title);
-  const [oldTitle, setOldTitle] = useState(task.title);
-  const [isInputDisabled, setInputDisabled] = useState(true);
-  const [isCompl, setIsDone] = useState(task.isDone);
-  const [selectedLine, setSelectedLine] = useState("");
+  const [isValid, setValid] = useState(true); //validation control
+  const [isEditing, setEditing] = useState(false); //editing mode for conditional output
+  const [newTitle, setNewTitle] = useState(task.title); //title change handler
+  const [oldTitle, setOldTitle] = useState(task.title); //old title saver
+  const [isCompl, setIsDone] = useState(task.isDone); //taks status handler
 
-  function handleTitleChange(event) {
+  function handleInput(event) {
     setNewTitle(event.target.value);
+    setValid(true);
+  }
+
+  function handleCancel() {
+    setNewTitle(oldTitle)
+    setValid(true);
+    setEditing(false);
   }
 
   async function handleStatusChange() {
@@ -24,157 +29,83 @@ export default function Task({ task, updater, page }) {
     UserData.isDone = !task.isDone;
     UserData.id = task.id;
     try {
-      await apiTodoChange(UserData);
+      await apiChangeTodo(UserData);
     } catch (error) {
       alert(`Failed to change status, ${error}`);
     }
     updater(page);
   }
 
-  async function handleEdit(id, TITLE) {
-    const userData = { title: TITLE, id: id };
-    if (validator(TITLE)) {
+  async function handleNewTitle() {
+    const userData = { title: newTitle, id: task.id };
+    console.log(userData);
+    if (validator(newTitle)) {
       try {
         setValid(true);
-        await apiTodoChange(userData);
+        await apiChangeTodo(userData);
         console.log(`Task changed to ${newTitle}`);
       } catch (error) {
         alert(`Failed to change title, ${error}`);
       }
-      setOldTitle(TITLE); //saving old title in case of calncelling changes
+      setEditing(false);
+      setOldTitle(newTitle); //if cancel
     } else {
       setValid(false);
     }
   }
 
-  async function handleNewTitle(isClicked) {
-    if (isClicked) {
-      setSelectedLine("selected"); //highlight input
-      setEditing(true);
-      setInputDisabled(false);
-    }
-    if (!isClicked) {
-      setSelectedLine(""); //unhighlight input
-
-      await handleEdit(task.id, newTitle);
-      setEditing(false);
-      setInputDisabled(true);
-    }
+  async function handleEdit() {
+    setEditing(true);
   }
 
-  async function handleDeleteTask(id, TITLE) {
+  async function handleDeleteTask() {
     try {
-      await apiDeleteTask(id);
+      await apiDeleteTask(task.id);
     } catch (error) {
       alert(`Failed to delete task, ${error}`);
     }
     updater(page);
-    console.log(`Task "${TITLE}" deleted`);
-  }
-
-  function handleCancel() {
-    setSelectedLine(""); //unhiglight input
-    setEditing(false);
-    setInputDisabled(true);
-    setNewTitle(oldTitle); //r  efresh title changes
+    console.log(`Task "${task.title}" deleted`);
   }
 
   return (
-    <div key={task.id} className={styles.taskholder}>
-      {!isEditing ? ( //viewing mode
-        <div className={styles.taskform}>
+    <>
+      <div key={task.id} className={styles.taskholder}>
+        <div className={styles.taskholderrow}>
           <input
-            className="checkbox"
-            type="checkbox"
-            defaultChecked={isCompl}
-            onChange={() => handleStatusChange()}
-          />
-          <p className="selectedLine">{oldTitle}</p>
-          <Button
-            onClick={() => handleNewTitle(true, task.id)}
-            nameButton="Edit"
-            styleName="editbutton"
-          />
-          <Button
-            onClick={() => handleDeleteTask(task.id, task.title)}
-            nameButton="Delete"
-            styleName="delbutton"
-          />
-        </div>
-      ) : (
-        //editing mode
-        <div className={styles.taskform}>
-          <input
-            className="checkbox"
+            className={styles.checkbox}
             type="checkbox"
             defaultChecked={isCompl}
             onChange={() => handleStatusChange()}
           />
           <input
-            className="selected"
+            className={styles.selected}
             type="text"
-            defaultValue={newTitle}
-            onChange={handleTitleChange}
-            disabled={isInputDisabled}
-            required={true}
+            disabled={!isEditing}
+            value={newTitle}
+            onChange={handleInput}
           />
-          <Button
-            onClick={() => handleNewTitle(false, task.id)}
-            nameButton="Save"
-            styleName="savebutton"
-          />
-          <Button
-            onClick={() => handleCancel()}
-            value="Cancel"
-            nameButton="Cancel"
-            styleName="cancelbutton"
-          />
-          {isValid ? (
-            <p className="text">Text should be 2-64 characters long!</p>
+          {!isEditing ? ( //viewing
+            <>
+              <Button onClick={() => handleEdit()} typeButton="edit" />
+              <Button onClick={() => handleDeleteTask()} typeButton="del" />
+            </>
           ) : (
-            <p></p>
+            //editing
+            <>
+              <Button onClick={() => handleNewTitle()} typeButton="save" />
+              <Button onClick={() => handleCancel()} typeButton="cancel" />
+            </>
           )}
         </div>
-      )}
-
-      {/* <input
-        className={"checkbox"}
-        type="checkbox"
-        defaultChecked={task.status}
-        onChange={() => handleStatusChange(task.status, task.id)}
-      />
-      {!isEditing ? (
-        <>
-          <p className={selectedLine}>{oldTitle}</p>
-          <button onClick={() => handleNewTitle(true, task.id)}>Edit</button>
-          <button onClick={() => handleDeleteTask(task.id, task.title)}>
-            Delete
-          </button>
-        </>
-      ) : (
-        <div className="task-form">
-          <input
-            className={`${selectedLine} p`}
-            type="text"
-            defaultValue={newTitle}
-            onChange={handleTitleChange}
-            disabled={isInputDisabled}
-            required={true}
-          />
-          <input
-            type="button"
-            className="btn"
-            value="Save"
-            onClick={() => handleNewTitle(false, task.id)}
-          />
-          <input
-            type="button"
-            className="btn"
-            onClick={() => handleCancel()}
-            value="Cancel"
-          />
-        </div>
-      )} */}
-    </div>
+        {!isValid ? (
+          <p className={styles.errortext}>
+            Text should be 2-64 characters long!
+          </p>
+        ) : (
+          <></>
+        )}
+      </div>
+    </>
   );
 }

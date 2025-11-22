@@ -21,7 +21,6 @@
   font-family: sans-serif;
   font-weight: bold; 
   font-size: large;
-  background-color: rgb(255, 99, 99);
 }
 
 .taskcreatorrow input {
@@ -35,30 +34,6 @@
   font-size: large;
   margin-left: 2rem;
   border-bottom: 1px solid;
-}
-
-.taskcreatorrow button {
-  width: 5rem;
-  margin-left: 1rem;
-  margin-right: 2rem;
-  background-color: rgb(152, 228, 228);
-  border-radius: 5px;
-}
-
-.taskcreatorrow button:hover {
-  width: 5rem;
-  margin-left: 1rem;
-  margin-right: 2rem;
-  background-color: rgb(118, 250, 250);
-  cursor: pointer;
-}
-
-.taskcreatorrow button:active {
-  width: 5rem;
-  margin-left: 1rem;
-  margin-right: 2rem;
-  background-color: rgb(114, 149, 253);
-  cursor: pointer;
 }
 
 .errortext {

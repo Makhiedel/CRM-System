@@ -1,69 +1,34 @@
+
+.checkbox {
+  width: 2rem;
+  margin-right: 1rem;
+}
+
 .taskholder {
   border-radius: 12px;
   background-color: aliceblue;
   margin: 1rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;
+  place-self: center;
   width: 60%;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
-.taskholder p {
+.taskholderrow {
+  display: flex;
+}
+
+.selected {
   width: 100%;
   text-align: left;
-  padding-left: 1rem;
-  font-family: sans-serif;
   font-weight: bold;
   font-size: large;
-}
-
-.taskholder .checkbox {
-  width: 2rem;
-  margin-left: 2rem;
-}
-
-.taskholder input {
-  width: 100%;
-  text-align: left;
-  padding-left: 1rem;
-  font-family: sans-serif;
-  font-weight: bold;
-  font-size: large;
-}
-
-.taskholder .selected {
-  width: 100%;
-  text-align: left;
-  padding-left: 1rem;
-  font-family: sans-serif;
-  font-weight: bold;
-  font-size: large;
-  background-color: rgb(174, 178, 255);
   cursor: text;
-}
-
-.taskholder button {
-  width: 10rem;
-  margin-left: 1rem;
-  margin-right: 2rem;
-  background-color: rgb(152, 228, 228);
-  border-radius: 5px;
-}
-
-.taskholder button:hover {
-  width: 10rem;
-  margin-left: 1rem;
-  margin-right: 2rem;
-  background-color: rgb(118, 250, 250);
-  cursor: pointer;
-}
-
-.taskholder button:active {
-  width: 10rem;
-  margin-left: 1rem;
-  margin-right: 2rem;
-  background-color: rgb(114, 149, 253);
-  cursor: pointer;
+  display: flex;
 }
 
 .taskform {
@@ -75,15 +40,6 @@
   width: 100%;
 }
 
-.taskform .p {
-  width: 100%;
-  text-align: left;
-  padding-left: 1rem;
-  font-family: sans-serif;
-  font-weight: bold;
-  font-size: 18px;
-}
-
 .taskform input {
   font-family: Verdana;
   font-weight: 500;
@@ -91,34 +47,10 @@
   padding: none;
   margin-left: 1rem;
   margin-right: 2rem;
-  background-color: rgb(152, 228, 228);
   border-radius: 5px;
 }
 
-.taskform .btn {
-  font-family: Verdana;
-  width: 10rem;
-  margin-left: 1rem;
-  margin-right: 2rem;
-  background-color: rgb(152, 228, 228);
-  border-radius: 5px;
-  text-align: center;
-}
-
-.taskform .btn:hover {
-  font-family: Verdana;
-  font-weight: 500;
-  width: 10rem;
-  margin-left: 1rem;
-  margin-right: 2rem;
-  background-color: rgb(118, 250, 250);
-  cursor: pointer;
-}
-
-.taskform .btn:active {
-  width: 10rem;
-  margin-left: 1rem;
-  margin-right: 2rem;
-  background-color: rgb(114, 149, 253);
-  cursor: pointer;
+.errortext {
+  padding-top: 1rem;
+  font-weight: bold;
 }

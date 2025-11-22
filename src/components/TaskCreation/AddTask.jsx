@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { apiCreateTask } from "../../api/api";
 import { validator } from "../../utils/validator";
+import Button from "../UI/Buttons/Button";
 
 import styles from './AddTask.module.css'
 
@@ -35,7 +36,7 @@ export default function AddTask({ currentPage, handleUpdate }) {
           placeholder="Task to be done..."
           value={taskName}
         />
-        <button onClick={setSubmit}>Add</button>
+        <Button onClick={setSubmit} typeButton="add"/>
       </div>
       {isValid ? (
         <p className={styles.errortext}>Text should be 2-64 characters long!</p>

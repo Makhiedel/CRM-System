@@ -1,12 +1,42 @@
-.editbutton {
- color: grey; 
+button {
+  width: 2rem;
+  height: auto;
+  margin-left: 1rem;
+  margin-right: 2rem;
+  border: none;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  
+  --edit-color: #50a8ff;
+  --del-color: #f37c7c;
+  --save-color:  #50a8ff;
+  --cancel-color: #979797;
+
 }
-.delbutton {
-  color: red;
+
+button:hover {
+  cursor: pointer;
+  filter: brightness(0.9);
 }
-.savebutton {
-  color: green;
+
+.add {
+  background-image: url("./svg/add.svg");
+  height: 2rem;
 }
-.cancelbutton {
-  color: blue;
+.edit {
+  background-color: var(--edit-color);
+  background-image: url("./svg/edit.svg");
+}
+.del {
+  background-color: var(--del-color);
+  background-image: url("./svg/delete.svg");
+}
+.save {
+  background-color: var(--save-color);
+  background-image: url("./svg/save.svg");
+}
+.cancel {
+  background-color: var(--cancel-color);
+  background-image: url("./svg/cancel.svg");
 }
