@@ -5,7 +5,7 @@ import { validator } from "../../utils/validator";
 import Button from "../UI/Buttons/Button";
 import styles from "./Task.module.css";
 
-export default function Task({ task, updater, page }) {
+export default function Task({ task, updater }) {
   const [isValid, setValid] = useState(true); //validation control
   const [isEditing, setEditing] = useState(false); //editing mode for conditional output
   const [newTitle, setNewTitle] = useState(task.title); //title change handler
@@ -17,7 +17,7 @@ export default function Task({ task, updater, page }) {
     setValid(true);
   }
 
-  function handleCancel() {
+  function cancelEdit() {
     setNewTitle(oldTitle)
     setValid(true);
     setEditing(false);
@@ -33,7 +33,7 @@ export default function Task({ task, updater, page }) {
     } catch (error) {
       alert(`Failed to change status, ${error}`);
     }
-    updater(page);
+    updater();
   }
 
   async function handleNewTitle() {
@@ -54,7 +54,7 @@ export default function Task({ task, updater, page }) {
     }
   }
 
-  async function handleEdit() {
+  async function startEdit() {
     setEditing(true);
   }
 
@@ -64,13 +64,12 @@ export default function Task({ task, updater, page }) {
     } catch (error) {
       alert(`Failed to delete task, ${error}`);
     }
-    updater(page);
+    updater();
     console.log(`Task "${task.title}" deleted`);
   }
 
   return (
-    <>
-      <div key={task.id} className={styles.taskholder}>
+      <li key={task.id} className={styles.taskholder}>
         <div className={styles.taskholderrow}>
           <input
             className={styles.checkbox}
@@ -87,14 +86,14 @@ export default function Task({ task, updater, page }) {
           />
           {!isEditing ? ( //viewing
             <>
-              <Button onClick={() => handleEdit()} typeButton="edit" />
+              <Button onClick={() => startEdit()} typeButton="edit" />
               <Button onClick={() => handleDeleteTask()} typeButton="del" />
             </>
           ) : (
             //editing
             <>
               <Button onClick={() => handleNewTitle()} typeButton="save" />
-              <Button onClick={() => handleCancel()} typeButton="cancel" />
+              <Button onClick={() => cancelEdit()} typeButton="cancel" />
             </>
           )}
         </div>
@@ -105,7 +104,6 @@ export default function Task({ task, updater, page }) {
         ) : (
           <></>
         )}
-      </div>
-    </>
+      </li>
   );
 }

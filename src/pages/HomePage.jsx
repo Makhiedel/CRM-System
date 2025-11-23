@@ -12,18 +12,13 @@ export default function Todo() {
   const [page, setPage] = useState("all"); //query param for filtration
   const [fetchedData, setFetchedData] = useState({}); //data for counters
 
-  async function fetcher(param) {
+  async function fetcher() {
     try {
-      setPage(param);
-      const data = await fetchTasks(param);
+      const data = await fetchTasks(page);
       const helperArray = await data.data.map((task) => (
-        <div key={task.id}>
-          <Task
-            task={task}
-            updater={fetcher}
-            page={page}
-          ></Task>
-        </div>
+        <ul key={task.id}>
+          <Task task={task} updater={fetcher} />
+        </ul>
       ));
       setTasks(helperArray); //tasks deriving
       setFetchedData(data); //counters
@@ -31,30 +26,24 @@ export default function Todo() {
     } catch (error) {
       alert(`Failed to update, ${error}`);
     }
-    console.log(param);
   }
 
   useEffect(() => {
-    fetcher(page);
+    fetcher();
+    const autoUpdate = setInterval(fetcher, 5000);
+    return () => clearInterval(autoUpdate);
   }, [page]);
 
   return (
     <div className="main-container">
-      <AddTask currentPage={page} handleUpdate={fetcher} />
+      <AddTask handleUpdate={fetcher} />
       <TaskFilter
         taskCounter={fetchedData}
         state={tasks}
         currentPage={page}
-        setPage={setPage}
         handleUpdate={setPage}
       />
-      <TodoList
-        data={fetchedData}
-        tasks={tasks}
-        setTasks={setTasks}
-        page={page}
-        updater={fetcher}
-      />
+      <TodoList tasks={tasks} />
     </div>
   );
 }

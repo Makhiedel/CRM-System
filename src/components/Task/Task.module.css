@@ -6,7 +6,7 @@
 
 .taskholder {
   border-radius: 12px;
-  background-color: aliceblue;
+  background-color: #f0f8ff;
   margin: 1rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -32,7 +32,6 @@
 }
 
 .taskform {
-  background-color: aliceblue;
   margin: none;
   padding-top: none;
   padding-bottom: none;

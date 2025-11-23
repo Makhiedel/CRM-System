@@ -5,7 +5,7 @@ import Button from "../UI/Buttons/Button";
 
 import styles from './AddTask.module.css'
 
-export default function AddTask({ currentPage, handleUpdate }) {
+export default function AddTask({ handleUpdate }) {
   const [taskName, setTaskName] = useState("");
   const [isValid, setValid] = useState(false);
 
@@ -15,11 +15,15 @@ export default function AddTask({ currentPage, handleUpdate }) {
   }
 
   async function setSubmit() {
-    const UserData = { isDone: false, title: taskName };
+    const userData = { isDone: false, title: taskName };
     if (validator(taskName)) {
-      await apiCreateTask(UserData);
-      console.log(`"${taskName}" task created`);
-      handleUpdate(currentPage);
+      try {
+        const response = await apiCreateTask(userData);
+        console.log(`"${taskName}" task created`, response)
+      } catch (error) {
+        alert("Failed to create task!", error);
+      };
+      handleUpdate();
       setTaskName("");
     } else {
       setValid(true);
