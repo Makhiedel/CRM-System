@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { useEffect } from "react";
 
-import { fetchTasks } from "../api/api";
-import AddTask from "../components/TaskCreation/AddTask";
-import TaskFilter from "../components/Selection/TaskFilter";
-import TodoList from "../components/TodoList/TodoList";
-import Task from "../components/Task/Task";
+import { fetchTasks } from "../api/api.js";
+import AddTask from "../components/AddTask/AddTask.js";
+import TaskFilter from "../components/TaskFilter/TaskFilter.js";
+import TodoList from "../components/TodoList/TodoList.js";
+import Task from "../components/Task/Task.js";
+import type {Todo, QueryFilter} from "../types/Todos.js";
 
 export default function Todo() {
-  const [tasks, setTasks] = useState([]); //tasks
-  const [page, setPage] = useState("all"); //query param for filtration
-  const [fetchedData, setFetchedData] = useState({}); //data for counters
+  const [tasks, setTasks] = useState<Todo[]>([]); //tasks
+  const [page, setPage] = useState<QueryFilter>("all"); //query param for filtration
+  const [fetchedData, setFetchedData] = useState<Todo[]>(); //data for counters
 
   async function fetcher() {
     try {

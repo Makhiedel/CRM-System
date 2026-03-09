@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { apiCreateTask } from "../../api/api";
-import { validator } from "../../utils/validator";
-import Button from "../UI/Buttons/Button";
+import { apiCreateTask } from "../../api/api.js";
+import { validator } from "../../utils/validator.js";
+import Button from "../UI/Buttons/Button.js";
 
 import styles from './AddTask.module.css'
 

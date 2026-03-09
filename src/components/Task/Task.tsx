@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { apiDeleteTask } from "../../api/api";
-import { apiChangeTodo } from "../../api/api";
-import { validator } from "../../utils/validator";
-import Button from "../UI/Buttons/Button";
+import { apiDeleteTask } from "../../api/api.js";
+import { apiChangeTodo } from "../../api/api.js";
+import { validator } from "../../utils/validator.js";
+import Button from "../UI/Buttons/Button.js";
 import styles from "./Task.module.css";
 
 export default function Task({ task, updater }) {
