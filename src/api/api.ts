@@ -1,20 +1,21 @@
 const api = "https://easydev.club/api/v1/todos";
 
-export async function fetchTasks(filter) {//recieving data from back
+import type {Todo, QueryFilter, RawTodo, UserInputTask} from "../types/Todos.js";
+export async function fetchTasks(filter:QueryFilter) {//recieving data from back
   console.log('fetching');
   try {
     const response = await fetch(api + `?filter=${filter}`);
     if (!response.ok) {
       throw new Error(`response status ${response.status}`);
     }
-    const data = await response.json();
+    const data:RawTodo = await response.json();
     return data;
-  } catch (error) {
+  } catch (error:any) {
     throw new Error(error.message);
   }
 }
 
-export async function apiCreateTask(taskTitle) {//adding task
+export async function apiCreateTask(taskTitle:String) {//adding task
   try {
     const response = await fetch(api, {
       method: "POST",
@@ -26,16 +27,16 @@ export async function apiCreateTask(taskTitle) {//adding task
     if (!response.ok) {
       throw new Error("Failed to add");
     }
-  } catch (error) {
+  } catch (error:any) {
     console.log(error.message);
     throw new Error(error.message);
   }
 }
 
-export async function apiDeleteTask(id) {
+export async function apiDeleteTask(id:Number) {
 
   try {
-    const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, {
+    const response = await fetch((api+"/"+id), {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -44,15 +45,15 @@ export async function apiDeleteTask(id) {
     if (!response.ok) {
       throw new Error("Failed to delete");
     }
-  } catch (error) {
+  } catch (error:any) {
     console.log(error.message);
     throw new Error(error.message);
   }
 }
 
-export async function apiChangeTodo(taskInfo) {
+export async function apiChangeTodo(taskInfo:UserInputTask) {
   try {
-    const response = await fetch(`https://easydev.club/api/v1/todos/${taskInfo.id}`, {
+    const response = await fetch((api + "/" + taskInfo.id), {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -62,7 +63,7 @@ export async function apiChangeTodo(taskInfo) {
     if (!response.ok) {
       throw new Error("Failed to change status");
     }
-  } catch (error) {
+  } catch (error:any) {
     console.log(error.message);
     throw new Error(error.message);
   }
