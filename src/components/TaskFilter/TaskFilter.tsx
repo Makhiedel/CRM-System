@@ -1,29 +1,52 @@
-import { useState, useEffect } from "react";
-import styles from './Filter.module.css';
+import { useState, useEffect, type ReactNode} from "react";
+import styles from "./Filter.module.css";
+import type {
+  TodoElements,
+  QueryFilter,
+  RawTodo,
+  Counters,
+} from "../../types/Todos.js";
 
 export default function TaskFilter({
   taskCounter,
   state,
   currentPage,
   handleUpdate,
+}: {
+  taskCounter: RawTodo;
+  state: TodoElements | undefined;
+  currentPage: QueryFilter;
+  handleUpdate: Function;
 }) {
-  const [all, setAll] = useState();
-  const [completed, setCompleted] = useState();
-  const [inWork, setInWork] = useState();
+  const [all, setAll] = useState<number>();
+  const [completed, setCompleted] = useState<number>();
+  const [inWork, setInWork] = useState<number>();
 
   async function handleTaskCounterDisplay() {
-    const tasks = await taskCounter.info;
+
+    const tasks: Counters = taskCounter!.info;
     setAll(tasks.all);
     setInWork(tasks.inWork);
     setCompleted(tasks.completed);
   }
 
   useEffect(() => {
-    console.log(taskCounter);
+    console.log(state);
     handleTaskCounterDisplay();
   }, [state]);
 
-  function Selector({ currentPage, displayName, filter, quantity }) {
+  function Selector({
+    currentPage,
+    displayName,
+    filter,
+    quantity,
+  }: {
+    currentPage: QueryFilter;
+    displayName: String;
+    filter: QueryFilter;
+    quantity: ReactNode; //children prop
+
+  }) {
     return (
       <p
         className={currentPage === filter ? styles.selected : ""} //underline

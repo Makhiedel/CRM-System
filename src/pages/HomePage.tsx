@@ -1,29 +1,28 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect} from "react";
 
 import { fetchTasks } from "../api/api.js";
 import AddTask from "../components/AddTask/AddTask.js";
 import TaskFilter from "../components/TaskFilter/TaskFilter.js";
 import TodoList from "../components/TodoList/TodoList.js";
 import Task from "../components/Task/Task.js";
-import type {Todo, QueryFilter, RawTodo} from "../types/Todos.js";
+import type {Todo, QueryFilter, RawTodo, TodoElements} from "../types/Todos.js";
 
 export default function Todo() {
-  const [tasks, setTasks] = useState<Todo[]>([]); //tasks
+  const [tasks, setTasks] = useState<TodoElements>(); //tasks
   const [page, setPage] = useState<QueryFilter>("all"); //query param for filtration
-  const [fetchedData, setFetchedData] = useState<Todo[]>(); //data for counters
+  const [fetchedData, setFetchedData] = useState<RawTodo>(); //data for counters
 
   async function fetcher() {
     try {
       const data:RawTodo = await fetchTasks(page);
-      const helperArray:Todo[] = data.data.map((task) => (
+      const helperArray:TodoElements = data!.data.map((task) => (
         <ul key={task.id}>
           <Task task={task} updater={fetcher} />
         </ul>
       ));
       setTasks(helperArray); //tasks deriving
       setFetchedData(data); //counters
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       alert(`Failed to update, ${error}`);
     }

@@ -1,9 +1,9 @@
-import { useEffect } from "react";
-import type { TodoProps } from "../../types/Todos.js";
+import { useEffect, type ReactElement } from "react";
+import type { TodoElements, Todo } from "../../types/Todos.js";
 
 
-export default function TodoList({tasks}:TodoProps) { //incorrect type - it's html objects inside
-
+export default function TodoList({tasks}:{tasks:TodoElements | undefined}) {
+  // console.log(tasks);
   useEffect(() => {
   }, [tasks]);
 

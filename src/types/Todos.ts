@@ -1,3 +1,5 @@
+import type { ReactElement, ReactNode } from "react";
+
 export type Todo = {
   id: number;
   title: string;
@@ -5,19 +7,21 @@ export type Todo = {
   isDone: boolean;
 };
 
+export type Counters = {all: number, completed: number, inWork: number}
+
 export type RawTodo = {
   data: Array<Todo>;
-  info: {all: Number, completed: Number, inWork: Number};
-}; 
+  info: Counters;
+}|undefined; 
 
 export type TodoProps = {
   tasks: Todo[];
-};
+}|undefined;
 
 export type QueryFilter = "all" | "inWork" | "completed";
 
-export type TodoElement = {
-  
+export type TodoElements = {
+  [key:number]: ReactElement<any>; //redo later, no jsx will be stored in variables
 };
 
 export type UserInputTask = {
