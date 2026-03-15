@@ -15,14 +15,14 @@ export async function fetchTasks(filter:QueryFilter) {//recieving data from back
   }
 }
 
-export async function apiCreateTask(taskTitle:String) {//adding task
+export async function apiCreateTask(taskInfo:UserInputTask) {//adding task
   try {
     const response = await fetch(api, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(taskTitle),
+      body: JSON.stringify(taskInfo),
     });
     if (!response.ok) {
       throw new Error("Failed to add");
@@ -33,7 +33,7 @@ export async function apiCreateTask(taskTitle:String) {//adding task
   }
 }
 
-export async function apiDeleteTask(id:Number) {
+export async function apiDeleteTask(id:number) {
 
   try {
     const response = await fetch((api+"/"+id), {

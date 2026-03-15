@@ -2,26 +2,27 @@ import { useState } from "react";
 import { apiCreateTask } from "../../api/api.js";
 import { validator } from "../../utils/validator.js";
 import Button from "../UI/Buttons/Button.js";
+import type { UserInputTask } from "../../types/Todos.js";
 
 import styles from './AddTask.module.css'
 
-export default function AddTask({ handleUpdate }) {
-  const [taskName, setTaskName] = useState("");
-  const [isValid, setValid] = useState(false);
+export default function AddTask({ handleUpdate }:{handleUpdate:Function}) {
+  const [taskName, setTaskName] = useState<string>("");
+  const [isValid, setValid] = useState<boolean>(false);
 
-  function handleTaskName(event) {
+  function handleTaskName(event:React.ChangeEvent<HTMLInputElement>) {
     setTaskName(event.target.value);
     setValid(false);
   }
 
   async function setSubmit() {
-    const userData = { isDone: false, title: taskName };
+    const taskData:UserInputTask = { isDone: false, title: taskName };
     if (validator(taskName)) {
       try {
-        const response = await apiCreateTask(userData);
+        const response = await apiCreateTask(taskData);
         console.log(`"${taskName}" task created`, response)
       } catch (error) {
-        alert("Failed to create task!", error);
+        alert(`Failed to create task! ${error}`);
       };
       handleUpdate();
       setTaskName("");

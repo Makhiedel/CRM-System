@@ -5,12 +5,12 @@ import AddTask from "../components/AddTask/AddTask.js";
 import TaskFilter from "../components/TaskFilter/TaskFilter.js";
 import TodoList from "../components/TodoList/TodoList.js";
 import Task from "../components/Task/Task.js";
-import type {Todo, QueryFilter, RawTodo, TodoElements} from "../types/Todos.js";
+import type {Todo, QueryFilter, RawTodo, TodoElements, Counters} from "../types/Todos.js";
 
 export default function Todo() {
   const [tasks, setTasks] = useState<TodoElements>(); //tasks
   const [page, setPage] = useState<QueryFilter>("all"); //query param for filtration
-  const [fetchedData, setFetchedData] = useState<RawTodo>(); //data for counters
+  const [CounterData, setCounterData] = useState<Counters>({all:0,inWork:0,completed:0}); //data for counters
 
   async function fetcher() {
     try {
@@ -21,7 +21,7 @@ export default function Todo() {
         </ul>
       ));
       setTasks(helperArray); //tasks deriving
-      setFetchedData(data); //counters
+      setCounterData(data?.info); //counters
       // console.log(data);
     } catch (error) {
       alert(`Failed to update, ${error}`);
@@ -38,7 +38,7 @@ export default function Todo() {
     <div className="main-container">
       <AddTask handleUpdate={fetcher} />
       <TaskFilter
-        taskCounter={fetchedData}
+        taskCounter={CounterData}
         state={tasks}
         currentPage={page}
         handleUpdate={setPage}

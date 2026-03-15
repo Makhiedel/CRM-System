@@ -13,7 +13,7 @@ export default function TaskFilter({
   currentPage,
   handleUpdate,
 }: {
-  taskCounter: RawTodo;
+  taskCounter: Counters;
   state: TodoElements | undefined;
   currentPage: QueryFilter;
   handleUpdate: Function;
@@ -24,7 +24,7 @@ export default function TaskFilter({
 
   async function handleTaskCounterDisplay() {
 
-    const tasks: Counters = taskCounter!.info;
+    const tasks = taskCounter!;
     setAll(tasks.all);
     setInWork(tasks.inWork);
     setCompleted(tasks.completed);

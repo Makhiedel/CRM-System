@@ -7,7 +7,7 @@ export type Todo = {
   isDone: boolean;
 };
 
-export type Counters = {all: number, completed: number, inWork: number}
+export type Counters = {all: number, completed: number, inWork: number} | undefined
 
 export type RawTodo = {
   data: Array<Todo>;
@@ -25,6 +25,7 @@ export type TodoElements = {
 };
 
 export type UserInputTask = {
-  isDone: Boolean;
-  id: Number;
+  isDone?: boolean;
+  id?: Number;
+  title?: string;
 }
