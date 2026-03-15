@@ -26,6 +26,6 @@ export type TodoElements = {
 
 export type UserInputTask = {
   isDone?: boolean;
-  id?: Number;
+  id?: number;
   title?: string;
 }
