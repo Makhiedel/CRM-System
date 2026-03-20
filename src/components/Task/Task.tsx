@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { apiChangeTodo, apiDeleteTask } from "../../api/api.js";
 import { validator } from "../../utils/validator.js";
-import type { UserInputTask, Todo } from "../../types/Todos.js";
+import type { UserInputTask, Todo, Validator } from "../../types/Todos.js";
 import Button from "../UI/Buttons/Button.js";
 import styles from "./Task.module.css";
 
@@ -12,7 +12,7 @@ export default function Task({
   task: Todo;
   updater: Function;
 }) {
-  const [isValid, setValid] = useState<boolean>(true); //validation control
+  const [validation, setValidation] = useState<Validator>({ isValid: true }); //validation control
   const [isEditing, setEditing] = useState<boolean>(false); //editing mode for conditional output
   const [newTitle, setNewTitle] = useState<string>(task.title); //title change handler
   const [oldTitle, setOldTitle] = useState<string>(task.title); //old title saver
@@ -20,12 +20,12 @@ export default function Task({
 
   function handleInput(event: React.ChangeEvent<HTMLInputElement>) {
     setNewTitle(event.target.value);
-    setValid(true);
+    setValidation({ isValid: true }); //to hide error message
   }
 
   function cancelEdit() {
     setNewTitle(oldTitle);
-    setValid(true);
+    setValidation({ isValid: true }); //to hide error message
     setEditing(false);
     console.log(task);
   }
@@ -45,9 +45,8 @@ export default function Task({
   async function handleNewTitle() {
     const taskData: UserInputTask = { title: newTitle, id: task.id };
     console.log(taskData);
-    if (validator(newTitle)) {
+    if (validator(newTitle).isValid) {
       try {
-        setValid(true);
         await apiChangeTodo(taskData);
         console.log(`Task changed to ${newTitle}`);
       } catch (error) {
@@ -56,7 +55,7 @@ export default function Task({
       setEditing(false);
       setOldTitle(newTitle); //if cancel
     } else {
-      setValid(false);
+      setValidation(validator(newTitle)); //showing error
     }
   }
 
@@ -103,8 +102,8 @@ export default function Task({
           </>
         )}
       </div>
-      {!isValid ? (
-        <p className={styles.errortext}>Text should be 2-64 characters long!</p>
+      {!validation.isValid ? (
+        <p className={styles.errortext}>{validation.errorMessage}</p>
       ) : (
         <></>
       )}

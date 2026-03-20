@@ -29,3 +29,8 @@ export type UserInputTask = {
   id?: number;
   title?: string;
 }
+
+export type Validator = {
+  isValid: boolean;
+  errorMessage?: string;
+}
