@@ -10,12 +10,12 @@ export default function AddTask({ handleUpdate }: { handleUpdate: Function }) {
   const [taskName, setTaskName] = useState<string>("");
   const [validation, setValidation] = useState<Validator>({ isValid: true });
 
-  function handleTaskName(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleTaskName(event: React.ChangeEvent<HTMLInputElement>):void {
     setTaskName(event.target.value);
     setValidation({ isValid: true });
   }
 
-  async function setSubmit() {
+  async function setSubmit():Promise<void> {
     const taskData: UserInputTask = { isDone: false, title: taskName };
 
     if (validator(taskName).isValid) {

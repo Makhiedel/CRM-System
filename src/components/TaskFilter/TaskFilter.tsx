@@ -3,7 +3,6 @@ import styles from "./Filter.module.css";
 import type {
   TodoElements,
   QueryFilter,
-  RawTodo,
   Counters,
 } from "../../types/Todos.js";
 
@@ -22,7 +21,7 @@ export default function TaskFilter({
   const [completed, setCompleted] = useState<number>();
   const [inWork, setInWork] = useState<number>();
 
-  async function handleTaskCounterDisplay() {
+  async function handleTaskCounterDisplay():Promise<void> {
 
     const tasks = taskCounter!;
     setAll(tasks.all);
@@ -46,7 +45,7 @@ export default function TaskFilter({
     filter: QueryFilter;
     quantity: ReactNode; //children prop
 
-  }) {
+  }):ReactNode {
     return (
       <p
         className={currentPage === filter ? styles.selected : ""} //underline

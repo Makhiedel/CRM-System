@@ -18,19 +18,19 @@ export default function Task({
   const [oldTitle, setOldTitle] = useState<string>(task.title); //old title saver
   const [isCompl, setIsDone] = useState<boolean>(task.isDone); //taks status handler
 
-  function handleInput(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleInput(event: React.ChangeEvent<HTMLInputElement>):void {
     setNewTitle(event.target.value);
     setValidation({ isValid: true }); //to hide error message
   }
 
-  function cancelEdit() {
+  function cancelEdit():void {
     setNewTitle(oldTitle);
     setValidation({ isValid: true }); //to hide error message
     setEditing(false);
     console.log(task);
   }
 
-  async function handleStatusChange() {
+  async function handleStatusChange():Promise<void> {
     setIsDone((value) => !value);
     const taskData: UserInputTask = { isDone: !task.isDone, id: task.id };
 
@@ -42,7 +42,7 @@ export default function Task({
     updater();
   }
 
-  async function handleNewTitle() {
+  async function handleNewTitle():Promise<void> {
     const taskData: UserInputTask = { title: newTitle, id: task.id };
     console.log(taskData);
     if (validator(newTitle).isValid) {
@@ -59,11 +59,11 @@ export default function Task({
     }
   }
 
-  async function startEdit() {
+  function startEdit():void {
     setEditing(true);
   }
 
-  async function handleDeleteTask() {
+  async function handleDeleteTask():Promise<void> {
     try {
       await apiDeleteTask(task.id);
     } catch (error) {

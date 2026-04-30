@@ -1,21 +1,42 @@
 const api = "https://easydev.club/api/v1/todos";
 
-import type {Todo, QueryFilter, RawTodo, UserInputTask} from "../types/Todos.js";
-export async function fetchTasks(filter:QueryFilter) {//recieving data from back
-  console.log('fetching');
+import type {
+  Todo,
+  QueryFilter,
+  Todos,
+  UserInputTask,
+} from "../types/Todos.js";
+
+function errorHelper(error: unknown): string {
+  if (error instanceof Error) {
+    throw new Error(error.message);
+  } else if (error === 'string'){
+    throw new Error(error);
+  } else {
+    throw new Error('Unknown error');
+  }
+}
+
+export async function fetchTasks(filter: QueryFilter): Promise<Todos> {
+  //recieving data from back
+  console.log("fetching");
   try {
     const response = await fetch(api + `?filter=${filter}`);
     if (!response.ok) {
       throw new Error(`response status ${response.status}`);
     }
-    const data:RawTodo = await response.json();
+    const data: Todos = await response.json();
     return data;
-  } catch (error:any) {
-    throw new Error(error.message);
+  } catch (error: unknown) {
+    errorHelper(error);
+    throw error;
   }
 }
 
-export async function apiCreateTask(taskInfo:UserInputTask) {//adding task
+export async function apiCreateTask(
+  taskInfo: UserInputTask,
+): Promise<Response> {
+  //adding task
   try {
     const response = await fetch(api, {
       method: "POST",
@@ -27,16 +48,16 @@ export async function apiCreateTask(taskInfo:UserInputTask) {//adding task
     if (!response.ok) {
       throw new Error("Failed to add");
     }
-  } catch (error:any) {
-    console.log(error.message);
-    throw new Error(error.message);
+    return response;
+  } catch (error: unknown) {
+    errorHelper(error);
+    throw error;
   }
 }
 
-export async function apiDeleteTask(id:number) {
-
+export async function apiDeleteTask(id: number): Promise<Response> {
   try {
-    const response = await fetch((api+"/"+id), {
+    const response = await fetch(api + "/" + id, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -45,26 +66,32 @@ export async function apiDeleteTask(id:number) {
     if (!response.ok) {
       throw new Error("Failed to delete");
     }
-  } catch (error:any) {
-    console.log(error.message);
-    throw new Error(error.message);
+    return response;
+  } catch (error: unknown) {
+    errorHelper(error);
+    throw error;
   }
 }
 
-export async function apiChangeTodo(taskInfo:UserInputTask) {
+export async function apiChangeTodo(
+  taskInfo: UserInputTask,
+): Promise<Response> {
   try {
-    const response = await fetch((api + "/" + taskInfo.id), {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(taskInfo),
-      })
+    const response = await fetch(api + "/" + taskInfo.id, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(taskInfo),
+    });
     if (!response.ok) {
       throw new Error("Failed to change status");
+    } else if (!taskInfo.id) {
+      throw new Error("Failed to change: no id");
     }
-  } catch (error:any) {
-    console.log(error.message);
-    throw new Error(error.message);
+    return response;
+  } catch (error: unknown) {
+    errorHelper(error);
+    throw error;
   }
 }

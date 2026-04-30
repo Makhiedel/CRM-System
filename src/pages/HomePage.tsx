@@ -5,16 +5,16 @@ import AddTask from "../components/AddTask/AddTask.js";
 import TaskFilter from "../components/TaskFilter/TaskFilter.js";
 import TodoList from "../components/TodoList/TodoList.js";
 import Task from "../components/Task/Task.js";
-import type {Todo, QueryFilter, RawTodo, TodoElements, Counters} from "../types/Todos.js";
+import type {Todo, QueryFilter, Todos, TodoElements, Counters} from "../types/Todos.js";
 
 export default function Todo() {
   const [tasks, setTasks] = useState<TodoElements>(); //tasks
   const [page, setPage] = useState<QueryFilter>("all"); //query param for filtration
   const [CounterData, setCounterData] = useState<Counters>({all:0,inWork:0,completed:0}); //data for counters
 
-  async function fetcher() {
+  async function fetcher():Promise<void> {
     try {
-      const data:RawTodo = await fetchTasks(page);
+      const data:Todos = await fetchTasks(page);
       const helperArray:TodoElements = data!.data.map((task) => (
         <ul key={task.id}>
           <Task task={task} updater={fetcher} />
