@@ -18,7 +18,7 @@ export default function HomePage() {
   const [queryFilter, setQueryFilter] = useState<QueryFilter>("all"); //query param for filtration
   const [counterData, setCounterData] = useState<Counters>(); //data for counters
 
-  async function fetcher(): Promise<void> {
+  async function fetchData(): Promise<void> {
     try {
       const data: Todos = await fetchTasks(queryFilter);
       setTasks(data);
@@ -38,21 +38,21 @@ export default function HomePage() {
   }
 
   useEffect(() => {
-    fetcher();
-    const autoUpdate = setInterval(fetcher, 5000);
+    fetchData();
+    const autoUpdate = setInterval(fetchData, 5000);
     return () => clearInterval(autoUpdate);
   }, [queryFilter]);
 
   return (
     <div className="main-container">
-      <AddTask handleUpdate={fetcher} />
+      <AddTask handleUpdate={fetchData} />
       <TaskFilter
         taskCounter={counterData}
         state={tasks}
         currentPage={queryFilter}
         handleUpdate={setQueryFilter}
       />
-      <TodoList tasks={tasks} updater={fetcher} />
+      <TodoList tasks={tasks} fetchData={fetchData} />
     </div>
   );
 }

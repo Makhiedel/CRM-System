@@ -1,13 +1,13 @@
 import { useEffect } from "react";
-import type { TodoElements, Todos } from "../../types/Todos.js";
+import type { Todos } from "../../types/Todos.js";
 import Task from "../Task/Task.js";
 
 export default function TodoList({
   tasks,
-  updater,
+  fetchData,
 }: {
   tasks: Todos;
-  updater: ()=>Promise<void>;
+  fetchData: ()=>Promise<void>;
 }) {
   console.log(tasks);
   useEffect(() => {}, [tasks]);
@@ -19,7 +19,7 @@ export default function TodoList({
   return (
     <>
       {tasks.data.map((task) => (
-        <Task key={task.id} task={task} updater={updater} />
+        <Task key={task.id} task={task} fetchData={fetchData} />
       ))}
     </>
   );

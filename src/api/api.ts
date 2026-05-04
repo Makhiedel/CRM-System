@@ -4,10 +4,10 @@ import type {
   Todo,
   QueryFilter,
   Todos,
-  UserInputTask,
+  TaskData,
 } from "../types/Todos.js";
 
-function errorHelper(error: unknown): string {
+function handleError(error: unknown): string {
   if (error instanceof Error) {
     throw new Error(error.message);
   } else if (error === 'string'){
@@ -28,13 +28,13 @@ export async function fetchTasks(filter: QueryFilter): Promise<Todos> {
     const data: Todos = await response.json();
     return data;
   } catch (error: unknown) {
-    errorHelper(error);
+    handleError(error);
     throw error;
   }
 }
 
-export async function apiCreateTask(
-  taskInfo: UserInputTask,
+export async function createTask(
+  taskInfo: TaskData,
 ): Promise<Response> {
   //adding task
   try {
@@ -50,12 +50,12 @@ export async function apiCreateTask(
     }
     return response;
   } catch (error: unknown) {
-    errorHelper(error);
+    handleError(error);
     throw error;
   }
 }
 
-export async function apiDeleteTask(id: number): Promise<Response> {
+export async function deleteTask(id: number): Promise<Response> {
   try {
     const response = await fetch(api + "/" + id, {
       method: "DELETE",
@@ -68,13 +68,13 @@ export async function apiDeleteTask(id: number): Promise<Response> {
     }
     return response;
   } catch (error: unknown) {
-    errorHelper(error);
+    handleError(error);
     throw error;
   }
 }
 
-export async function apiChangeTodo(
-  taskInfo: UserInputTask,
+export async function changeTask(
+  taskInfo: TaskData,
 ): Promise<Response> {
   try {
     const response = await fetch(api + "/" + taskInfo.id, {
@@ -91,7 +91,7 @@ export async function apiChangeTodo(
     }
     return response;
   } catch (error: unknown) {
-    errorHelper(error);
+    handleError(error);
     throw error;
   }
 }

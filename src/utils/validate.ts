@@ -1,6 +1,6 @@
 import type { Validator } from "../types/Todos.js";
 
-export function validator(text: string): Validator {
+export function validate(text: string): Validator {
   const minimumLength = 2;
   const maximumLenght = 64;
 

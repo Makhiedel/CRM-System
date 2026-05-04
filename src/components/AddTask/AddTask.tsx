@@ -1,34 +1,39 @@
 import { useState } from "react";
-import { apiCreateTask } from "../../api/api.js";
-import { validator } from "../../utils/validator.js";
+import { createTask } from "../../api/api.js";
+import { validate } from "../../utils/validate.js";
 import Button from "../UI/Buttons/Button.js";
-import type { UserInputTask, Validator } from "../../types/Todos.js";
+import type { TaskData, Validator } from "../../types/Todos.js";
 
 import styles from "./AddTask.module.css";
 
-export default function AddTask({ handleUpdate }: { handleUpdate: Function }) {
+export default function AddTask({ handleUpdate }: { handleUpdate: () => Promise<void> }) {
   const [taskName, setTaskName] = useState<string>("");
   const [validation, setValidation] = useState<Validator>({ isValid: true });
 
-  function handleTaskName(event: React.ChangeEvent<HTMLInputElement>):void {
+  function handleTaskName(event: React.ChangeEvent<HTMLInputElement>): void {
     setTaskName(event.target.value);
     setValidation({ isValid: true });
   }
 
-  async function setSubmit():Promise<void> {
-    const taskData: UserInputTask = { isDone: false, title: taskName };
+  async function setSubmit(): Promise<void> {
+    const taskData: TaskData = { isDone: false, title: taskName };
 
-    if (validator(taskName).isValid) {
+    if (validate(taskName).isValid) {
       try {
-        const response = await apiCreateTask(taskData);
+        const response = await createTask(taskData);
         console.log(`"${taskName}" task created`, response);
+
+        if (!response.ok) {
+          throw new Error("Failed to upload!");
+        } else {
+          setTaskName(""); //clear input only if task is created
+        }
       } catch (error) {
         alert(`Failed to create task! ${error}`);
       }
       handleUpdate();
-      setTaskName("");
     } else {
-      setValidation(validator(taskName));
+      setValidation(validate(taskName));
 
       setTaskName("");
     }

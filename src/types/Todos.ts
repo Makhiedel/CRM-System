@@ -31,7 +31,7 @@ export type TodoElements = {
   [key: number]: ReactElement; //node stored in variable
 };
 
-export type UserInputTask = {
+export type TaskData = {
   isDone?: boolean;
   id?: number;
   title?: string;
