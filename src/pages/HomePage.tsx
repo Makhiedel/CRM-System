@@ -1,28 +1,37 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 
 import { fetchTasks } from "../api/api.js";
 import AddTask from "../components/AddTask/AddTask.js";
 import TaskFilter from "../components/TaskFilter/TaskFilter.js";
 import TodoList from "../components/TodoList/TodoList.js";
 import Task from "../components/Task/Task.js";
-import type {Todo, QueryFilter, Todos, TodoElements, Counters} from "../types/Todos.js";
+import type {
+  Todo,
+  QueryFilter,
+  Todos,
+  TodoElements,
+  Counters,
+} from "../types/Todos.js";
 
-export default function Todo() {
-  const [tasks, setTasks] = useState<TodoElements>(); //tasks
-  const [page, setPage] = useState<QueryFilter>("all"); //query param for filtration
-  const [CounterData, setCounterData] = useState<Counters>({all:0,inWork:0,completed:0}); //data for counters
+export default function HomePage() {
+  const [tasks, setTasks] = useState<Todos>(); //tasks
+  const [queryFilter, setQueryFilter] = useState<QueryFilter>("all"); //query param for filtration
+  const [counterData, setCounterData] = useState<Counters>(); //data for counters
 
-  async function fetcher():Promise<void> {
+  async function fetcher(): Promise<void> {
     try {
-      const data:Todos = await fetchTasks(page);
-      const helperArray:TodoElements = data!.data.map((task) => (
-        <ul key={task.id}>
-          <Task task={task} updater={fetcher} />
-        </ul>
-      ));
-      setTasks(helperArray); //tasks deriving
-      setCounterData(data?.info); //counters
-      // console.log(data);
+      const data: Todos = await fetchTasks(queryFilter);
+      setTasks(data);
+
+      if (data === undefined) {
+        setCounterData({
+          all: 0,
+          inWork: 0,
+          completed: 0,
+        });
+      } else {
+        setCounterData(data.info); //counters
+      }
     } catch (error) {
       alert(`Failed to update, ${error}`);
     }
@@ -32,18 +41,18 @@ export default function Todo() {
     fetcher();
     const autoUpdate = setInterval(fetcher, 5000);
     return () => clearInterval(autoUpdate);
-  }, [page]);
+  }, [queryFilter]);
 
   return (
     <div className="main-container">
       <AddTask handleUpdate={fetcher} />
       <TaskFilter
-        taskCounter={CounterData}
+        taskCounter={counterData}
         state={tasks}
-        currentPage={page}
-        handleUpdate={setPage}
+        currentPage={queryFilter}
+        handleUpdate={setQueryFilter}
       />
-      <TodoList tasks={tasks} />
+      <TodoList tasks={tasks} updater={fetcher} />
     </div>
   );
 }

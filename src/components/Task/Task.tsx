@@ -10,7 +10,7 @@ export default function Task({
   updater,
 }: {
   task: Todo;
-  updater: Function;
+  updater: () => Promise<void>;
 }) {
   const [validation, setValidation] = useState<Validator>({ isValid: true }); //validation control
   const [isEditing, setEditing] = useState<boolean>(false); //editing mode for conditional output

@@ -17,7 +17,7 @@ export type Todos = {
   meta: {
     totalAmount: number;
   };
-};
+}|undefined;
 
 export type TodoProps =
   | {
@@ -28,7 +28,7 @@ export type TodoProps =
 export type QueryFilter = "all" | "inWork" | "completed";
 
 export type TodoElements = {
-  [key: number]: ReactElement<any>; //redo later, no jsx will be stored in variables
+  [key: number]: ReactElement; //node stored in variable
 };
 
 export type UserInputTask = {
