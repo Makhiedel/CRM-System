@@ -1,5 +1,6 @@
 import { useState, useEffect, type ReactNode } from "react";
 import styles from "./Filter.module.css";
+import Selector from "./Selector.js";
 import type { QueryFilter, Counters, Todos } from "../../types/Todos.js";
 
 interface Props {
@@ -7,12 +8,6 @@ interface Props {
   state: Todos;
   currentPage: QueryFilter;
   handleUpdate: React.Dispatch<React.SetStateAction<QueryFilter>>; //seter
-}
-interface SelectorProps {
-  currentPage: QueryFilter;
-  displayName: String;
-  filter: QueryFilter;
-  quantity: number | undefined;
 }
 
 export default function TaskFilter({
@@ -41,22 +36,6 @@ export default function TaskFilter({
     updateTaskCounters();
   }, [state]);
 
-  function Selector({
-    currentPage,
-    displayName,
-    filter,
-    quantity,
-  }: SelectorProps): ReactNode {
-    return (
-      <p
-        className={currentPage === filter ? styles.selected : ""} //underline
-        onClick={() => handleUpdate(filter)}
-      >
-        {displayName} ({quantity})
-      </p>
-    );
-  }
-
   return (
     <div className={styles.selectionholder}>
       <Selector
@@ -64,18 +43,21 @@ export default function TaskFilter({
         displayName={"All"}
         filter={"all"}
         quantity={all}
+        handleUpdate={handleUpdate}
       />
       <Selector
         currentPage={currentPage}
         displayName={"In work"}
         filter={"inWork"}
         quantity={inWork}
+        handleUpdate={handleUpdate}
       />
       <Selector
         currentPage={currentPage}
         displayName={"Done"}
         filter={"completed"}
         quantity={completed}
+        handleUpdate={handleUpdate}
       />
     </div>
   );

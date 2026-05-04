@@ -7,7 +7,7 @@ import type { TaskData, Validator } from "../../types/Todos.js";
 import styles from "./AddTask.module.css";
 
 interface Props {
-  handleUpdate: () => Promise<void>
+  handleUpdate: () => Promise<void>;
 }
 
 export default function AddTask({ handleUpdate }: Props) {
@@ -54,10 +54,8 @@ export default function AddTask({ handleUpdate }: Props) {
         />
         <Button onClick={setSubmit} typeButton="add" />
       </div>
-      {!validation.isValid ? (
+      {!validation.isValid && (
         <p className={styles.errortext}>{validation.errorMessage}</p>
-      ) : (
-        <p></p>
       )}
     </div>
   );
