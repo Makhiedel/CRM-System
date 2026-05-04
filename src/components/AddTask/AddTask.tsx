@@ -6,7 +6,11 @@ import type { TaskData, Validator } from "../../types/Todos.js";
 
 import styles from "./AddTask.module.css";
 
-export default function AddTask({ handleUpdate }: { handleUpdate: () => Promise<void> }) {
+interface Props {
+  handleUpdate: () => Promise<void>
+}
+
+export default function AddTask({ handleUpdate }: Props) {
   const [taskName, setTaskName] = useState<string>("");
   const [validation, setValidation] = useState<Validator>({ isValid: true });
 

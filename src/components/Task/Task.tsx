@@ -5,32 +5,31 @@ import type { TaskData, Todo, Validator } from "../../types/Todos.js";
 import Button from "../UI/Buttons/Button.js";
 import styles from "./Task.module.css";
 
-export default function Task({
-  task,
-  fetchData,
-}: {
+interface Props {
   task: Todo;
   fetchData: () => Promise<void>;
-}) {
+}
+
+export default function Task({ task, fetchData }: Props) {
   const [validation, setValidation] = useState<Validator>({ isValid: true }); //validation control
   const [isEditing, setEditing] = useState<boolean>(false); //editing mode for conditional output
   const [newTitle, setNewTitle] = useState<string>(task.title); //title change handler
   const [oldTitle, setOldTitle] = useState<string>(task.title); //old title saver
   const [isComplete, setIsDone] = useState<boolean>(task.isDone); //taks status handler
 
-  function handleInput(event: React.ChangeEvent<HTMLInputElement>):void {
+  function handleInput(event: React.ChangeEvent<HTMLInputElement>): void {
     setNewTitle(event.target.value);
     setValidation({ isValid: true }); //to hide error message
   }
 
-  function cancelEdit():void {
+  function cancelEdit(): void {
     setNewTitle(oldTitle);
     setValidation({ isValid: true }); //to hide error message
     setEditing(false);
     console.log(task);
   }
 
-  async function handleStatusChange():Promise<void> {
+  async function handleStatusChange(): Promise<void> {
     setIsDone((value) => !value);
     const taskData: TaskData = { isDone: !task.isDone, id: task.id };
 
@@ -42,7 +41,7 @@ export default function Task({
     fetchData();
   }
 
-  async function handleNewTitle():Promise<void> {
+  async function handleNewTitle(): Promise<void> {
     const taskData: TaskData = { title: newTitle, id: task.id };
     console.log(taskData);
     if (validate(newTitle).isValid) {
@@ -59,11 +58,11 @@ export default function Task({
     }
   }
 
-  function startEdit():void {
+  function startEdit(): void {
     setEditing(true);
   }
 
-  async function handleDeleteTask():Promise<void> {
+  async function handleDeleteTask(): Promise<void> {
     try {
       await deleteTask(task.id);
     } catch (error) {
@@ -102,10 +101,8 @@ export default function Task({
           </>
         )}
       </div>
-      {!validation.isValid ? (
+      {!validation.isValid && (
         <p className={styles.errortext}>{validation.errorMessage}</p>
-      ) : (
-        <></>
       )}
     </li>
   );

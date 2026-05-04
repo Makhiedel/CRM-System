@@ -1,37 +1,44 @@
-import { useState, useEffect, type ReactNode} from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import styles from "./Filter.module.css";
-import type {
-  TodoElements,
-  QueryFilter,
-  Counters,
-} from "../../types/Todos.js";
+import type { QueryFilter, Counters, Todos } from "../../types/Todos.js";
+
+interface Props {
+  taskCounter: Counters;
+  state: Todos;
+  currentPage: QueryFilter;
+  handleUpdate: React.Dispatch<React.SetStateAction<QueryFilter>>; //seter
+}
+interface SelectorProps {
+  currentPage: QueryFilter;
+  displayName: String;
+  filter: QueryFilter;
+  quantity: number | undefined;
+}
 
 export default function TaskFilter({
   taskCounter,
   state,
   currentPage,
   handleUpdate,
-}: {
-  taskCounter: Counters;
-  state: TodoElements | undefined;
-  currentPage: QueryFilter;
-  handleUpdate: Function;
-}) {
-  const [all, setAll] = useState<number>();
-  const [completed, setCompleted] = useState<number>();
-  const [inWork, setInWork] = useState<number>();
+}: Props) {
+  const [all, setAll] = useState<number>(0);
+  const [completed, setCompleted] = useState<number>(0);
+  const [inWork, setInWork] = useState<number>(0);
 
-  async function handleTaskCounterDisplay():Promise<void> {
-
-    const tasks = taskCounter!;
-    setAll(tasks.all);
-    setInWork(tasks.inWork);
-    setCompleted(tasks.completed);
+  function updateTaskCounters(): void {
+    if (taskCounter === undefined) {
+      setAll(0);
+      setInWork(0);
+      setCompleted(0);
+    } else {
+      setAll(taskCounter.all);
+      setInWork(taskCounter.inWork);
+      setCompleted(taskCounter.completed);
+    }
   }
 
   useEffect(() => {
-    console.log(state);
-    handleTaskCounterDisplay();
+    updateTaskCounters();
   }, [state]);
 
   function Selector({
@@ -39,13 +46,7 @@ export default function TaskFilter({
     displayName,
     filter,
     quantity,
-  }: {
-    currentPage: QueryFilter;
-    displayName: String;
-    filter: QueryFilter;
-    quantity: ReactNode; //children prop
-
-  }):ReactNode {
+  }: SelectorProps): ReactNode {
     return (
       <p
         className={currentPage === filter ? styles.selected : ""} //underline

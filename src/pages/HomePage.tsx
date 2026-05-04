@@ -4,14 +4,7 @@ import { fetchTasks } from "../api/api.js";
 import AddTask from "../components/AddTask/AddTask.js";
 import TaskFilter from "../components/TaskFilter/TaskFilter.js";
 import TodoList from "../components/TodoList/TodoList.js";
-import Task from "../components/Task/Task.js";
-import type {
-  Todo,
-  QueryFilter,
-  Todos,
-  TodoElements,
-  Counters,
-} from "../types/Todos.js";
+import type { QueryFilter, Todos, Counters } from "../types/Todos.js";
 
 export default function HomePage() {
   const [tasks, setTasks] = useState<Todos>(); //tasks

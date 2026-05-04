@@ -2,14 +2,13 @@ import { useEffect } from "react";
 import type { Todos } from "../../types/Todos.js";
 import Task from "../Task/Task.js";
 
-export default function TodoList({
-  tasks,
-  fetchData,
-}: {
+interface Props {
   tasks: Todos;
-  fetchData: ()=>Promise<void>;
-}) {
-  console.log(tasks);
+  fetchData: () => Promise<void>;
+}
+
+export default function TodoList({ tasks, fetchData }: Props) {
+
   useEffect(() => {}, [tasks]);
 
   if (tasks === undefined) {

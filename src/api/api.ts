@@ -1,25 +1,20 @@
 const api = "https://easydev.club/api/v1/todos";
 
-import type {
-  Todo,
-  QueryFilter,
-  Todos,
-  TaskData,
-} from "../types/Todos.js";
+import type { QueryFilter, Todos, TaskData } from "../types/Todos.js";
 
 function handleError(error: unknown): string {
   if (error instanceof Error) {
     throw new Error(error.message);
-  } else if (error === 'string'){
+  } else if (error === "string") {
     throw new Error(error);
   } else {
-    throw new Error('Unknown error');
+    throw new Error("Unknown error");
   }
 }
 
 export async function fetchTasks(filter: QueryFilter): Promise<Todos> {
   //recieving data from back
-  console.log("fetching");
+
   try {
     const response = await fetch(api + `?filter=${filter}`);
     if (!response.ok) {
@@ -33,9 +28,7 @@ export async function fetchTasks(filter: QueryFilter): Promise<Todos> {
   }
 }
 
-export async function createTask(
-  taskInfo: TaskData,
-): Promise<Response> {
+export async function createTask(taskInfo: TaskData): Promise<Response> {
   //adding task
   try {
     const response = await fetch(api, {
@@ -73,9 +66,7 @@ export async function deleteTask(id: number): Promise<Response> {
   }
 }
 
-export async function changeTask(
-  taskInfo: TaskData,
-): Promise<Response> {
+export async function changeTask(taskInfo: TaskData): Promise<Response> {
   try {
     const response = await fetch(api + "/" + taskInfo.id, {
       method: "PUT",
