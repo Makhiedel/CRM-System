@@ -1,8 +1,8 @@
-import Todo from "./pages/HomePage";
+import HomePage from "./pages/HomePage";
 import "./App.css";
 
 export default function App() {
   return (
-    <Todo />
+    <HomePage />
   )
 }
