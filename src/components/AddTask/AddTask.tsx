@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { createTask } from "../../api/api.js";
+import axios from "axios";
 import { validate } from "../../utils/validate.js";
 import Button from "../UI/Buttons/Button.js";
 import type { TaskData, Validator } from "../../types/Todos.js";
@@ -26,14 +27,13 @@ export default function AddTask({ handleUpdate }: Props) {
       try {
         const response = await createTask(taskData);
         console.log(`"${taskName}" task created`, response);
-
-        if (!response.ok) {
-          throw new Error("Failed to upload!");
-        } else {
-          setTaskName(""); //clear input only if task is created
-        }
+        setTaskName(""); //clear input only if task is created
       } catch (error) {
-        alert(`Failed to create task! ${error}`);
+        if (axios.isAxiosError(error)) {
+          console.error("HTTP error", error.response?.status, error.message);
+        } else {
+          console.log(`Failed to create task! ${error}`);
+        }
       }
       handleUpdate();
     } else {

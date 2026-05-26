@@ -32,18 +32,17 @@ export default function Task({ task, fetchData }: Props) {
   async function handleStatusChange(): Promise<void> {
     setIsDone((value) => !value);
     const taskData: TaskData = { isDone: !task.isDone, id: task.id };
-
     try {
       await changeTask(taskData);
+      fetchData();
     } catch (error) {
       alert(`Failed to change status, ${error}`);
     }
-    fetchData();
   }
 
   async function handleNewTitle(): Promise<void> {
     const taskData: TaskData = { title: newTitle, id: task.id };
-    console.log(taskData);
+  
     if (validate(newTitle).isValid) {
       try {
         await changeTask(taskData);
@@ -79,7 +78,7 @@ export default function Task({ task, fetchData }: Props) {
           className={styles.checkbox}
           type="checkbox"
           defaultChecked={isComplete}
-          onChange={() => handleStatusChange()}
+          onChange={handleStatusChange}
         />
         <input
           className={styles.selected}
