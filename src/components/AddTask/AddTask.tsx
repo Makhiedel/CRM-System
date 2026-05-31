@@ -2,7 +2,8 @@ import { useState } from "react";
 import { createTask } from "../../api/api.js";
 import axios from "axios";
 import { validate } from "../../utils/validate.js";
-import Button from "../UI/Buttons/Button.js";
+// import Button from "../UI/Buttons/Button.js";
+import { Button, Input, Form } from "antd";
 import type { TaskData, Validator } from "../../types/Todos.js";
 
 import styles from "./AddTask.module.css";
@@ -46,13 +47,15 @@ export default function AddTask({ handleUpdate }: Props) {
   return (
     <div className={styles.taskcreator}>
       <div className={styles.taskcreatorrow}>
-        <input
-          onChange={handleTaskName}
-          type="text"
-          placeholder="Task to be done..."
-          value={taskName}
-        />
-        <Button onClick={setSubmit} typeButton="add" />
+          <Input
+            onChange={handleTaskName}
+            type="text"
+            placeholder="Task to be done..."
+            value={taskName}
+          />
+        <Button onClick={setSubmit} type="primary" size="large">
+          Add
+        </Button>
       </div>
       {!validation.isValid && (
         <p className={styles.errortext}>{validation.errorMessage}</p>

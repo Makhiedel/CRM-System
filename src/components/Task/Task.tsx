@@ -2,7 +2,8 @@ import { useState } from "react";
 import { changeTask, deleteTask } from "../../api/api.js";
 import { validate } from "../../utils/validate.js";
 import type { TaskData, Todo, Validator } from "../../types/Todos.js";
-import Button from "../UI/Buttons/Button.js";
+// import Button from "../UI/Buttons/Button.js";
+import { Button, Input } from "antd";
 import styles from "./Task.module.css";
 
 interface Props {
@@ -42,7 +43,7 @@ export default function Task({ task, fetchData }: Props) {
 
   async function handleNewTitle(): Promise<void> {
     const taskData: TaskData = { title: newTitle, id: task.id };
-  
+
     if (validate(newTitle).isValid) {
       try {
         await changeTask(taskData);
@@ -74,13 +75,13 @@ export default function Task({ task, fetchData }: Props) {
   return (
     <li key={task.id} className={styles.taskholder}>
       <div className={styles.taskholderrow}>
-        <input
+        <Input
           className={styles.checkbox}
           type="checkbox"
           defaultChecked={isComplete}
           onChange={handleStatusChange}
         />
-        <input
+        <Input
           className={styles.selected}
           type="text"
           disabled={!isEditing}
@@ -89,14 +90,14 @@ export default function Task({ task, fetchData }: Props) {
         />
         {!isEditing ? ( //viewing
           <>
-            <Button onClick={() => startEdit()} typeButton="edit" />
-            <Button onClick={() => handleDeleteTask()} typeButton="del" />
+            <Button onClick={() => startEdit()}>Edit</Button>
+            <Button onClick={() => handleDeleteTask()}>Delete</Button>
           </>
         ) : (
           //editing
           <>
-            <Button onClick={() => handleNewTitle()} typeButton="save" />
-            <Button onClick={() => cancelEdit()} typeButton="cancel" />
+            <Button onClick={() => handleNewTitle()}>Save</Button>
+            <Button onClick={() => cancelEdit()}>Cancel</Button>
           </>
         )}
       </div>

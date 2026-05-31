@@ -44,7 +44,7 @@ export async function deleteTask(id: number): Promise<void> {
 export async function changeTask(taskInfo: TaskData): Promise<void> {
   try {
     const response = api.put("/todos/" + taskInfo.id, taskInfo);
-    
+    return response;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error("HTTP error", error.response?.status, error.message);
