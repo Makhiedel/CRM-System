@@ -1,7 +1,7 @@
 import { createTask } from "../../api/api.js";
 import axios from "axios";
 import { Button, Input, Form } from "antd";
-import type { TaskData, Validator } from "../../types/Todos.js";
+import type { TaskData } from "../../types/Todos.js";
 
 import styles from "./AddTask.module.css";
 
@@ -12,7 +12,7 @@ interface Props {
 export default function AddTask({ handleUpdate }: Props) {
   const [form] = Form.useForm();
 
-  async function setSubmit(value): Promise<void> {
+  async function setSubmit(value:{title:string}): Promise<void> {
     const taskData: TaskData = { isDone: false, title: value.title };
     try {
       const response = await createTask(taskData);
