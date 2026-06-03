@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { changeTask, deleteTask } from "../../api/api.js";
 import { validate } from "../../utils/validate.js";
-import type { TaskData, Todo, Validator } from "../../types/Todos.js";
+import type { TaskData, Todo } from "../../types/Todos.js";
 import { Button, Input, Form, Checkbox } from "antd";
 import styles from "./Task.module.css";
 
@@ -11,18 +11,19 @@ interface Props {
 }
 
 export default function Task({ task, fetchData }: Props) {
-  const [validation, setValidation] = useState<Validator>({ isValid: true }); //validation control
+  // const [validation, setValidation] = useState<Validator>({ isValid: true }); //validation control
   const [isEditing, setEditing] = useState<boolean>(false); //editing mode for conditional output
   const [newTitle, setNewTitle] = useState<string>(task.title); //title change handler
   const [oldTitle, setOldTitle] = useState<string>(task.title); //old title saver
   const [isComplete, setIsDone] = useState<boolean>(task.isDone); //taks status handler
   const [form] = Form.useForm(); //form state;
-  const [button1, setButton1] = useState<"Edit" | "Save">("Edit");
-  const [button2, setButton2] = useState<"Delete" | "Cancel">("Delete");
+  const [buttonNames, setButtonNames] = useState<
+    ["Edit" | "Save", "Delete" | "Cancel"]
+  >(["Edit", "Delete"]); //button names
 
   function handleInput(event: React.ChangeEvent<HTMLInputElement>): void {
     setNewTitle(event.target.value);
-    setValidation({ isValid: true }); //to hide error message
+    // setValidation({ isValid: true }); //to hide error message
   }
 
   async function handleStatusChange(): Promise<void> {
@@ -39,25 +40,20 @@ export default function Task({ task, fetchData }: Props) {
   async function editSaveButton(): Promise<void> {
     if (!isEditing) {
       setEditing(true);
-      setButton1("Save");
-      setButton2("Cancel");
+      setButtonNames(["Save", "Cancel"]);
     } else if (isEditing) {
-      setButton1("Edit");
-      setButton2("Delete");
+      setButtonNames(["Edit", "Delete"]);
+
       const taskData: TaskData = { title: newTitle, id: task.id };
 
-      if (validate(newTitle).isValid) {
-        try {
-          await changeTask(taskData);
-          console.log(`Task changed to ${newTitle}`);
-        } catch (error) {
-          alert(`Failed to change title, ${error}`);
-        }
-        setEditing(false);
-        setOldTitle(newTitle); //if cancel
-      } else {
-        setValidation(validate(newTitle)); //showing error
+      try {
+        await changeTask(taskData);
+        console.log(`Task changed to ${newTitle}`);
+      } catch (error) {
+        alert(`Failed to change title, ${error}`);
       }
+      setEditing(false);
+      setOldTitle(newTitle); //if cancel
     }
   }
 
@@ -72,21 +68,16 @@ export default function Task({ task, fetchData }: Props) {
       console.log(`Task "${task.title}" deleted`);
     } else if (isEditing) {
       setNewTitle(oldTitle);
-      setValidation({ isValid: true }); //to hide error message
+      // setValidation({ isValid: true }); //to hide error message
       setEditing(false);
       console.log(task);
-      setButton1("Edit");
-      setButton2("Delete");
+      setButtonNames(["Edit", "Delete"]);
     }
   }
 
   return (
     <li key={task.id} className={styles.taskholder}>
-      <Form
-        className={styles.taskholderrow}
-        form={form}
-        onFinish={undefined}
-      >
+      <Form className={styles.taskholderrow} form={form} onFinish={undefined}>
         <Form.Item className={styles.taskholderrow}>
           <Checkbox
             name="status"
@@ -95,6 +86,15 @@ export default function Task({ task, fetchData }: Props) {
             defaultChecked={isComplete}
             onChange={handleStatusChange}
           />
+        </Form.Item>
+        <Form.Item
+          className={styles.taskholderrow}
+          rules={[
+            { required: true, message: "Please enter the title!" },
+            { min: 3, message: "Minimum 3 characters" },
+            { max: 64, message: "Maximum 64 characters" },
+          ]}
+        >
           <Input
             name="title"
             className={styles.selected}
@@ -103,13 +103,14 @@ export default function Task({ task, fetchData }: Props) {
             value={newTitle}
             onChange={handleInput}
           />
-          <Button onClick={() => editSaveButton()}>{button1}</Button>
-          <Button onClick={() => deleteCancelButton()}>{button2}</Button>
         </Form.Item>
+        <Button onClick={() => editSaveButton()} htmlType="submit">
+          {buttonNames[0]}
+        </Button>
+        <Button onClick={() => deleteCancelButton()} htmlType="submit">
+          {buttonNames[1]}
+        </Button>
       </Form>
-      {!validation.isValid && (
-        <p className={styles.errortext}>{validation.errorMessage}</p>
-      )}
     </li>
   );
 }
