@@ -1,8 +1,5 @@
-import { useState } from "react";
 import { createTask } from "../../api/api.js";
 import axios from "axios";
-import { validate } from "../../utils/validate.js";
-// import Button from "../UI/Buttons/Button.js";
 import { Button, Input, Form } from "antd";
 import type { TaskData, Validator } from "../../types/Todos.js";
 
@@ -14,21 +11,12 @@ interface Props {
 
 export default function AddTask({ handleUpdate }: Props) {
   const [form] = Form.useForm();
-  const [taskName, setTaskName] = useState<string>("");
-  const [validation, setValidation] = useState<Validator>({ isValid: true });
-
-  function handleTaskName(event: React.ChangeEvent<HTMLInputElement>): void {
-    setTaskName(event.target.value);
-    // setValidation({ isValid: true });
-  }
 
   async function setSubmit(value): Promise<void> {
-    const taskData: TaskData = { isDone: false, title: value };
-    console.log(value);
+    const taskData: TaskData = { isDone: false, title: value.title };
     try {
       const response = await createTask(taskData);
-      console.log(`"${value}" task created`, response);
-   
+      // console.log(`"${value.title}" task created`, response);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("HTTP error", error.response?.status, error.message);
@@ -38,12 +26,6 @@ export default function AddTask({ handleUpdate }: Props) {
     }
     handleUpdate();
     form.resetFields();
-    // if (validate(taskName).isValid) {
-    // } else {
-    //   setValidation(validate(taskName));
-
-    //   setTaskName("");
-    // }
   }
 
   return (
@@ -55,6 +37,7 @@ export default function AddTask({ handleUpdate }: Props) {
         onFinish={setSubmit}
       >
         <Form.Item
+          name="title"
           rules={[
             { required: true, message: "Please enter the title!" },
             { min: 3, message: "Minimum 3 characters" },
@@ -70,9 +53,6 @@ export default function AddTask({ handleUpdate }: Props) {
         </Form.Item>
       </Form>
 
-      {!validation.isValid && (
-        <p className={styles.errortext}>{validation.errorMessage}</p>
-      )}
     </div>
   );
 }
