@@ -16,6 +16,9 @@ export default function Task({ task, fetchData }: Props) {
   const [newTitle, setNewTitle] = useState<string>(task.title); //title change handler
   const [oldTitle, setOldTitle] = useState<string>(task.title); //old title saver
   const [isComplete, setIsDone] = useState<boolean>(task.isDone); //taks status handler
+  const [submitAction, setSubmitAction] = useState<"delete" | "change">(
+    "delete",
+  );
   const [form] = Form.useForm(); //form state;
   const [buttonNames, setButtonNames] = useState<
     ["Edit" | "Save", "Delete" | "Cancel"]
@@ -42,18 +45,19 @@ export default function Task({ task, fetchData }: Props) {
       setEditing(true);
       setButtonNames(["Save", "Cancel"]);
     } else if (isEditing) {
+      setEditing(false);
       setButtonNames(["Edit", "Delete"]);
 
-      const taskData: TaskData = { title: newTitle, id: task.id };
+      // const taskData: TaskData = { title: newTitle, id: task.id };
 
-      try {
-        await changeTask(taskData);
-        console.log(`Task changed to ${newTitle}`);
-      } catch (error) {
-        alert(`Failed to change title, ${error}`);
-      }
-      setEditing(false);
-      setOldTitle(newTitle); //if cancel
+      // try {
+      //   await changeTask(taskData);
+      //   console.log(`Task changed to ${newTitle}`);
+      // } catch (error) {
+      //   alert(`Failed to change title, ${error}`);
+      // }
+      // setEditing(false);
+      // setOldTitle(newTitle); //if cancel
     }
   }
 
@@ -68,19 +72,33 @@ export default function Task({ task, fetchData }: Props) {
       console.log(`Task "${task.title}" deleted`);
     } else if (isEditing) {
       setNewTitle(oldTitle);
-      // setValidation({ isValid: true }); //to hide error message
+
       setEditing(false);
       console.log(task);
       setButtonNames(["Edit", "Delete"]);
     }
   }
 
+  async function submit(value: { title: string }) {
+    if (!isEditing) {
+      const taskData: TaskData = { title: value.title, id: task.id };
+
+      try {
+        await changeTask(taskData);
+        console.log(`Task changed to ${newTitle}`);
+      } catch (error) {
+        alert(`Failed to change title, ${error}`);
+      }
+      setEditing(false);
+      setOldTitle(newTitle); //if cancel
+    }
+  }
+
   return (
     <li key={task.id} className={styles.taskholder}>
-      <Form className={styles.taskholderrow} form={form} onFinish={undefined}>
+      <Form className={styles.taskholderrow} form={form} onFinish={submit}>
         <Form.Item className={styles.taskholderrow}>
           <Checkbox
-            name="status"
             className={styles.checkbox}
             type="checkbox"
             defaultChecked={isComplete}
@@ -88,6 +106,8 @@ export default function Task({ task, fetchData }: Props) {
           />
         </Form.Item>
         <Form.Item
+          initialValue={newTitle}
+          name="title"
           className={styles.taskholderrow}
           rules={[
             { required: true, message: "Please enter the title!" },
@@ -96,20 +116,17 @@ export default function Task({ task, fetchData }: Props) {
           ]}
         >
           <Input
-            name="title"
             className={styles.selected}
             type="text"
             disabled={!isEditing}
-            value={newTitle}
+            // value={newTitle}
             onChange={handleInput}
           />
         </Form.Item>
         <Button onClick={() => editSaveButton()} htmlType="submit">
           {buttonNames[0]}
         </Button>
-        <Button onClick={() => deleteCancelButton()} htmlType="submit">
-          {buttonNames[1]}
-        </Button>
+        <Button onClick={() => deleteCancelButton()}>{buttonNames[1]}</Button>
       </Form>
     </li>
   );
