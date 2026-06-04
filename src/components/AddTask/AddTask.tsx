@@ -40,7 +40,7 @@ export default function AddTask({ handleUpdate }: Props) {
           name="title"
           rules={[
             { required: true, message: "Please enter the title!" },
-            { min: 3, message: "Minimum 3 characters" },
+            { min: 2, message: "Minimum 2 characters" },
             { max: 64, message: "Maximum 64 characters" },
           ]}
         >

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { changeTask, deleteTask } from "../../api/api.js";
-import { validate } from "../../utils/validate.js";
 import type { TaskData, Todo } from "../../types/Todos.js";
 import { Button, Input, Form, Checkbox } from "antd";
 import styles from "./Task.module.css";
@@ -11,23 +10,12 @@ interface Props {
 }
 
 export default function Task({ task, fetchData }: Props) {
-  // const [validation, setValidation] = useState<Validator>({ isValid: true }); //validation control
   const [isEditing, setEditing] = useState<boolean>(false); //editing mode for conditional output
-  const [newTitle, setNewTitle] = useState<string>(task.title); //title change handler
-  const [oldTitle, setOldTitle] = useState<string>(task.title); //old title saver
   const [isComplete, setIsDone] = useState<boolean>(task.isDone); //taks status handler
-  const [submitAction, setSubmitAction] = useState<"delete" | "change">(
-    "delete",
-  );
   const [form] = Form.useForm(); //form state;
   const [buttonNames, setButtonNames] = useState<
     ["Edit" | "Save", "Delete" | "Cancel"]
   >(["Edit", "Delete"]); //button names
-
-  function handleInput(event: React.ChangeEvent<HTMLInputElement>): void {
-    setNewTitle(event.target.value);
-    // setValidation({ isValid: true }); //to hide error message
-  }
 
   async function handleStatusChange(): Promise<void> {
     setIsDone((value) => !value);
@@ -47,17 +35,6 @@ export default function Task({ task, fetchData }: Props) {
     } else if (isEditing) {
       setEditing(false);
       setButtonNames(["Edit", "Delete"]);
-
-      // const taskData: TaskData = { title: newTitle, id: task.id };
-
-      // try {
-      //   await changeTask(taskData);
-      //   console.log(`Task changed to ${newTitle}`);
-      // } catch (error) {
-      //   alert(`Failed to change title, ${error}`);
-      // }
-      // setEditing(false);
-      // setOldTitle(newTitle); //if cancel
     }
   }
 
@@ -71,26 +48,23 @@ export default function Task({ task, fetchData }: Props) {
       fetchData();
       console.log(`Task "${task.title}" deleted`);
     } else if (isEditing) {
-      setNewTitle(oldTitle);
-
+      form.resetFields();
       setEditing(false);
-      console.log(task);
       setButtonNames(["Edit", "Delete"]);
     }
   }
 
-  async function submit(value: { title: string }) {
+  async function submit(value: { title: string }): Promise<void> {
     if (!isEditing) {
       const taskData: TaskData = { title: value.title, id: task.id };
 
       try {
         await changeTask(taskData);
-        console.log(`Task changed to ${newTitle}`);
+        console.log(`Task changed to ${value.title}`);
       } catch (error) {
         alert(`Failed to change title, ${error}`);
       }
       setEditing(false);
-      setOldTitle(newTitle); //if cancel
     }
   }
 
@@ -106,12 +80,12 @@ export default function Task({ task, fetchData }: Props) {
           />
         </Form.Item>
         <Form.Item
-          initialValue={newTitle}
+          initialValue={task.title}
           name="title"
           className={styles.taskholderrow}
           rules={[
             { required: true, message: "Please enter the title!" },
-            { min: 3, message: "Minimum 3 characters" },
+            { min: 2, message: "Minimum 2 characters" },
             { max: 64, message: "Maximum 64 characters" },
           ]}
         >
@@ -119,8 +93,6 @@ export default function Task({ task, fetchData }: Props) {
             className={styles.selected}
             type="text"
             disabled={!isEditing}
-            // value={newTitle}
-            onChange={handleInput}
           />
         </Form.Item>
         <Button onClick={() => editSaveButton()} htmlType="submit">
