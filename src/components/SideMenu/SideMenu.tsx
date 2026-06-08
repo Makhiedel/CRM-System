@@ -11,8 +11,8 @@ export default function SideMenu() {
 
   return (
     <div className={styles.sidemenucontainer}>
-      <Button onClick={()=>navigateHandler("/")}>Список задач</Button>
-      <Button onClick={()=>navigateHandler("/profile")}>Профиль</Button>
+      <Button className={styles.buttons} size="large" onClick={()=>navigateHandler("/")}>Список задач</Button>
+      <Button className={styles.buttons} size="large" onClick={()=>navigateHandler("/profile")}>Профиль</Button>
     </div>
   )
 }

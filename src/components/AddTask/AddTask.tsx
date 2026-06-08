@@ -2,6 +2,7 @@ import { createTask } from "../../api/api.js";
 import axios from "axios";
 import { Button, Input, Form } from "antd";
 import type { TaskData } from "../../types/Todos.js";
+import { FileAddOutlined } from "@ant-design/icons";
 
 import styles from "./AddTask.module.css";
 
@@ -12,7 +13,7 @@ interface Props {
 export default function AddTask({ handleUpdate }: Props) {
   const [form] = Form.useForm();
 
-  async function setSubmit(value:{title:string}): Promise<void> {
+  async function setSubmit(value: { title: string }): Promise<void> {
     const taskData: TaskData = { isDone: false, title: value.title };
     try {
       const response = await createTask(taskData);
@@ -44,15 +45,17 @@ export default function AddTask({ handleUpdate }: Props) {
             { max: 64, message: "Maximum 64 characters" },
           ]}
         >
-          <Input placeholder="Task to be done..." />
+          <Input className={styles.input} placeholder="Task to be done..." />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" size="large" htmlType="submit">
-            Add
-          </Button>
+          <Button
+            icon={<FileAddOutlined />}
+            type="primary"
+            size="large"
+            htmlType="submit"
+          />
         </Form.Item>
       </Form>
-
     </div>
   );
 }

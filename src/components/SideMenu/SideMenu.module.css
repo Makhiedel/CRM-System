@@ -1,4 +1,15 @@
 .sidemenucontainer {
-  text-align: left;
-  display: grid;
+  height: 100%;
+  background: #f0f8ff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  position: fixed;
+  border-radius: 12px;
+  gap: 1rem;
+
+}
+.buttons {
+  width: 100%;
 }
