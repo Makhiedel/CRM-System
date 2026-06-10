@@ -20,6 +20,7 @@
 
 .taskholderrow {
   display: flex;
+  height: 3rem;
 }
 
 .selected {
@@ -31,25 +32,9 @@
   display: flex;
 }
 
-.taskform {
-  margin: none;
-  padding-top: none;
-  padding-bottom: none;
-  display: inline-flex;
-  width: 100%;
+.buttons {
+  margin-right: 1rem;
+  margin-left: auto;
 }
 
-.taskform input {
-  font-family: Verdana;
-  font-weight: 500;
-  width: 10rem;
-  padding: none;
-  margin-left: 1rem;
-  margin-right: 2rem;
-  border-radius: 5px;
-}
 
-.errortext {
-  padding-top: 1rem;
-  font-weight: bold;
-}

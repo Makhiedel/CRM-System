@@ -12,6 +12,7 @@ interface Props {
 export default function Task({ task, fetchData }: Props) {
   const [isEditing, setEditing] = useState<boolean>(false); //editing mode for conditional output
   const [isComplete, setIsDone] = useState<boolean>(task.isDone); //taks status handler
+  const [savedTitle, setSavedTitle] = useState<string>(task.title); 
   const [form] = Form.useForm(); //form state;
   const [buttonNames, setButtonNames] = useState<
     ["Edit" | "Save", "Delete" | "Cancel"]
@@ -64,6 +65,7 @@ export default function Task({ task, fetchData }: Props) {
       } catch (error) {
         alert(`Failed to change title, ${error}`);
       }
+      setSavedTitle(value.title);
       setEditing(false);
     }
   }
@@ -89,16 +91,22 @@ export default function Task({ task, fetchData }: Props) {
             { max: 64, message: "Maximum 64 characters" },
           ]}
         >
-          <Input
-            className={styles.selected}
-            type="text"
-            disabled={!isEditing}
-          />
+          {!isEditing ? (
+            <p className={styles.selected}>{savedTitle}</p>
+          ) : (
+            <Input
+              className={styles.selected}
+              type="text"
+              disabled={!isEditing}
+            />
+          )}
         </Form.Item>
-        <Button onClick={() => editSaveButton()} htmlType="submit">
-          {buttonNames[0]}
-        </Button>
-        <Button onClick={() => deleteCancelButton()}>{buttonNames[1]}</Button>
+        <div className={styles.buttons}>
+          <Button onClick={() => editSaveButton()} htmlType="submit">
+            {buttonNames[0]}
+          </Button>
+          <Button onClick={() => deleteCancelButton()}>{buttonNames[1]}</Button>
+        </div>
       </Form>
     </li>
   );
