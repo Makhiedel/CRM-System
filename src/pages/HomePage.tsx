@@ -37,7 +37,7 @@ export default function HomePage() {
   }, [queryFilter]);
 
   return (
-    <div className="main-container">
+    <div>
       <AddTask handleUpdate={fetchData} />
       <TaskFilter
         taskCounter={counterData}

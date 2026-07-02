@@ -8,21 +8,25 @@ import {
   TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import styles from "./SideMenu.module.css";
-// import Sider from "antd/es/layout/Sider.js";
+import type { MenuProps } from 'antd';
+
 
 const { Header, Content, Footer, Sider } = Layout;
 
-function getItem(label, key, icon, children) {
+function getItem(label, key, icon, children, onClick) {
   return {
     key,
     icon,
     children,
     label,
+    onClick,
   };
 }
-
-const items = [getItem("Список задач", "1",  <DesktopOutlined />)];
+ 
+const items: MenuProps['items'] = [
+  getItem("Список задач", "/", <DesktopOutlined />),
+  getItem("Профиль", "/profile", <FileOutlined />),
+];
 
 export default function SideMenu() {
   const [collapsed, setCollapsed] = useState(false);
@@ -33,33 +37,19 @@ export default function SideMenu() {
   }
 
   return (
-    <>
-      <Layout>
-        <Sider
-          collapsible
-          collapsed={collapsed}
-          onCollapse={(value) => setCollapsed(value)}
-        >
-          <Menu items={items} />
-        </Sider>
-      </Layout>
-
-      <div className={styles.sidemenucontainer}>
-        <Button
-          className={styles.buttons}
-          size="large"
-          onClick={() => navigateHandler("/")}
-        >
-          Список задач
-        </Button>
-        <Button
-          className={styles.buttons}
-          size="large"
-          onClick={() => navigateHandler("/profile")}
-        >
-          Профиль
-        </Button>
-      </div>
-    </>
+    <Layout style={{height: '100vh', position:'fixed'}}>
+      <Sider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
+      >
+        <Menu
+          onClick={({ key }) => {
+            navigateHandler(key);
+          }}
+          items={items}
+        />
+      </Sider>
+    </Layout>
   );
 }
