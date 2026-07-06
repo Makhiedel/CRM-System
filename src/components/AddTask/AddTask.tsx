@@ -3,7 +3,7 @@ import axios from "axios";
 import { Button, Input, Form } from "antd";
 import type { TaskData } from "../../types/Todos.js";
 import { FileAddOutlined } from "@ant-design/icons";
-
+import { rules } from "../../utils/validate.js";
 import styles from "./AddTask.module.css";
 
 interface Props {
@@ -39,11 +39,7 @@ export default function AddTask({ handleUpdate }: Props) {
       >
         <Form.Item
           name="title"
-          rules={[
-            { required: true, message: "Please enter the title!" },
-            { min: 2, message: "Minimum 2 characters" },
-            { max: 64, message: "Maximum 64 characters" },
-          ]}
+          rules={rules}
         >
           <Input className={styles.input} placeholder="Task to be done..." />
         </Form.Item>

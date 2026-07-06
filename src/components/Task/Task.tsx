@@ -3,6 +3,7 @@ import { changeTask, deleteTask } from "../../api/api.js";
 import type { TaskData, Todo } from "../../types/Todos.js";
 import { Button, Input, Form, Checkbox } from "antd";
 import styles from "./Task.module.css";
+import { rules } from "../../utils/validate.js";
 
 interface Props {
   task: Todo;
@@ -85,11 +86,7 @@ export default function Task({ task, fetchData }: Props) {
           initialValue={task.title}
           name="title"
           className={styles.taskholderrow}
-          rules={[
-            { required: true, message: "Please enter the title!" },
-            { min: 2, message: "Minimum 2 characters" },
-            { max: 64, message: "Maximum 64 characters" },
-          ]}
+          rules={rules}
         >
           {!isEditing ? (
             <p className={styles.selected}>{savedTitle}</p>

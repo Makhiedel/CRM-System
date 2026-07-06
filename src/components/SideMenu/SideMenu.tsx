@@ -9,6 +9,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from 'antd';
+import styles from "./SideMenu.module.css";
 
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -37,13 +38,13 @@ export default function SideMenu() {
   }
 
   return (
-    <Layout style={{height: '100vh', position:'fixed'}}>
+    <Layout className={styles.sidemenucontainer}>
       <Sider
         collapsible
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
       >
-        <Menu
+        <Menu className={styles.buttons}
           onClick={({ key }) => {
             navigateHandler(key);
           }}
