@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 
+import axios from "axios";
 import { fetchTasks } from "../api/api.js";
 import AddTask from "../components/AddTask/AddTask.js";
 import TaskFilter from "../components/TaskFilter/TaskFilter.js";
@@ -13,20 +14,19 @@ export default function HomePage() {
 
   async function fetchData(): Promise<void> {
     try {
-      const data: Todos = await fetchTasks(queryFilter);
-      setTasks(data);
-
-      if (data === undefined) {
-        setCounterData({
-          all: 0,
-          inWork: 0,
-          completed: 0,
-        });
+      const response = await fetchTasks(queryFilter);
+      if (response === undefined) {
+        fetchData;
       } else {
-        setCounterData(data.info); //counters
+        setTasks(response);
+        setCounterData(response.info);
       }
     } catch (error) {
-      alert(`Failed to update, ${error}`);
+      if (axios.isAxiosError(error)) {
+        console.error("HTTP error", error.response?.status, error.message);
+      } else {
+        console.log(`Failed to create task! ${error}`);
+      }
     }
   }
 
@@ -37,7 +37,7 @@ export default function HomePage() {
   }, [queryFilter]);
 
   return (
-    <div className="main-container">
+    <div>
       <AddTask handleUpdate={fetchData} />
       <TaskFilter
         taskCounter={counterData}

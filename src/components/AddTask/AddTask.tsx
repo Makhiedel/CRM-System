@@ -1,9 +1,9 @@
-import { useState } from "react";
 import { createTask } from "../../api/api.js";
-import { validate } from "../../utils/validate.js";
-import Button from "../UI/Buttons/Button.js";
-import type { TaskData, Validator } from "../../types/Todos.js";
-
+import axios from "axios";
+import { Button, Input, Form } from "antd";
+import type { TaskData } from "../../types/Todos.js";
+import { FileAddOutlined } from "@ant-design/icons";
+import { rules } from "../../utils/validate.js";
 import styles from "./AddTask.module.css";
 
 interface Props {
@@ -11,52 +11,47 @@ interface Props {
 }
 
 export default function AddTask({ handleUpdate }: Props) {
-  const [taskName, setTaskName] = useState<string>("");
-  const [validation, setValidation] = useState<Validator>({ isValid: true });
+  const [form] = Form.useForm();
 
-  function handleTaskName(event: React.ChangeEvent<HTMLInputElement>): void {
-    setTaskName(event.target.value);
-    setValidation({ isValid: true });
-  }
-
-  async function setSubmit(): Promise<void> {
-    const taskData: TaskData = { isDone: false, title: taskName };
-
-    if (validate(taskName).isValid) {
-      try {
-        const response = await createTask(taskData);
-        console.log(`"${taskName}" task created`, response);
-
-        if (!response.ok) {
-          throw new Error("Failed to upload!");
-        } else {
-          setTaskName(""); //clear input only if task is created
-        }
-      } catch (error) {
-        alert(`Failed to create task! ${error}`);
+  async function setSubmit(value: { title: string }): Promise<void> {
+    const taskData: TaskData = { isDone: false, title: value.title };
+    try {
+      const response = await createTask(taskData);
+      // console.log(`"${value.title}" task created`, response);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error("HTTP error", error.response?.status, error.message);
+      } else {
+        console.log(`Failed to create task! ${error}`);
       }
-      handleUpdate();
-    } else {
-      setValidation(validate(taskName));
-
-      setTaskName("");
     }
+    handleUpdate();
+    form.resetFields();
   }
 
   return (
     <div className={styles.taskcreator}>
-      <div className={styles.taskcreatorrow}>
-        <input
-          onChange={handleTaskName}
-          type="text"
-          placeholder="Task to be done..."
-          value={taskName}
-        />
-        <Button onClick={setSubmit} typeButton="add" />
-      </div>
-      {!validation.isValid && (
-        <p className={styles.errortext}>{validation.errorMessage}</p>
-      )}
+      <Form
+        form={form}
+        name="addTask"
+        className={styles.taskcreatorrow}
+        onFinish={setSubmit}
+      >
+        <Form.Item
+          name="title"
+          rules={rules}
+        >
+          <Input className={styles.input} placeholder="Task to be done..." />
+        </Form.Item>
+        <Form.Item>
+          <Button
+            icon={<FileAddOutlined />}
+            type="primary"
+            size="large"
+            htmlType="submit"
+          />
+        </Form.Item>
+      </Form>
     </div>
   );
 }
