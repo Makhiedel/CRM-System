@@ -25,7 +25,7 @@ export default function HomePage() {
       if (axios.isAxiosError(error)) {
         console.error("HTTP error", error.response?.status, error.message);
       } else {
-        console.log(`Failed to create task! ${error}`);
+        console.log(`Failed to fetch tasks! ${error}`);
       }
     }
   }

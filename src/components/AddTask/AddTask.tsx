@@ -41,7 +41,7 @@ export default function AddTask({ handleUpdate }: Props) {
           name="title"
           rules={rules}
         >
-          <Input className={styles.input} placeholder="Task to be done..." />
+          <Input className={styles.input} placeholder="Имя задачи.." />
         </Form.Item>
         <Form.Item>
           <Button

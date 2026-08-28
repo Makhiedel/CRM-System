@@ -40,21 +40,21 @@ export default function TaskFilter({
     <div className={styles.selectionholder}>
       <Selector
         currentPage={currentPage}
-        displayName={"All"}
+        displayName={"Все"}
         filter={"all"}
         quantity={all}
         handleUpdate={handleUpdate}
       />
       <Selector
         currentPage={currentPage}
-        displayName={"In work"}
+        displayName={"В работе"}
         filter={"inWork"}
         quantity={inWork}
         handleUpdate={handleUpdate}
       />
       <Selector
         currentPage={currentPage}
-        displayName={"Done"}
+        displayName={"Выполнены"}
         filter={"completed"}
         quantity={completed}
         handleUpdate={handleUpdate}
