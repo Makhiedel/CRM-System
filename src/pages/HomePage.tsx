@@ -9,7 +9,7 @@ import type { QueryFilter, Todos, Counters } from "../types/Todos.js";
 
 export default function HomePage() {
   const [tasks, setTasks] = useState<Todos>(); //tasks
-  const [queryFilter, setQueryFilter] = useState<QueryFilter>("all"); //query param for filtration
+  const [queryFilter, setQueryFilter] = useState<QueryFilter>("backlog"); //query param for filtration
   const [counterData, setCounterData] = useState<Counters>(); //data for counters
 
   async function fetchData(): Promise<void> {
@@ -19,7 +19,7 @@ export default function HomePage() {
         fetchData;
       } else {
         setTasks(response);
-        setCounterData(response.info);
+        setCounterData(response.meta.statusCounts);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {

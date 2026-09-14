@@ -2,12 +2,12 @@ import axios from "axios";
 import type { QueryFilter, Todos, TaskData } from "../types/Todos.js";
 
 const api = axios.create({
-  baseURL: "http://159.194.224.99:8082/api/v1/",
+  baseURL: "https://tech-mindset.ru/api/v1",
 });
 
 export async function fetchTasks(filter: QueryFilter): Promise<Todos> {
   try {
-    const response = await api.get<Todos>("/tasks" + `?filter=${filter}`);
+    const response = await api.get<Todos>("/tasks" + `?statuses=${filter}`);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
