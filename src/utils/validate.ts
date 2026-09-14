@@ -1,5 +1,11 @@
 import type { Validator } from "../types/Todos.js";
 
+export const rules = [
+            { required: true, message: "Пожалуйста, введите название!" }, // нельзя пустое поле
+            { min: 2, message: "Минимум 2 символа" }, //2 буквы минимум
+            { max: 64, message: "Максимум 64 символа" } //64 буквы максимум
+          ];
+
 export function validate(text: string): Validator {
   const minimumLength = 2;
   const maximumLenght = 64;

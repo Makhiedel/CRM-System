@@ -26,9 +26,9 @@ export default function TaskFilter({
       setInWork(0);
       setCompleted(0);
     } else {
-      setAll(taskCounter.all);
-      setInWork(taskCounter.inWork);
-      setCompleted(taskCounter.completed);
+      setAll(taskCounter.backlog);
+      setInWork(taskCounter.inProgress);
+      setCompleted(taskCounter.todo);
     }
   }
 
@@ -40,22 +40,22 @@ export default function TaskFilter({
     <div className={styles.selectionholder}>
       <Selector
         currentPage={currentPage}
-        displayName={"All"}
-        filter={"all"}
+        displayName={"Все"}
+        filter={"backlog"}
         quantity={all}
         handleUpdate={handleUpdate}
       />
       <Selector
         currentPage={currentPage}
-        displayName={"In work"}
-        filter={"inWork"}
+        displayName={"В работе"}
+        filter={"inProgress"}
         quantity={inWork}
         handleUpdate={handleUpdate}
       />
       <Selector
         currentPage={currentPage}
-        displayName={"Done"}
-        filter={"completed"}
+        displayName={"Выполнены"}
+        filter={"todo"}
         quantity={completed}
         handleUpdate={handleUpdate}
       />

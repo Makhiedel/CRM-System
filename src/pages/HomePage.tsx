@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 
+import axios from "axios";
 import { fetchTasks } from "../api/api.js";
 import AddTask from "../components/AddTask/AddTask.js";
 import TaskFilter from "../components/TaskFilter/TaskFilter.js";
@@ -8,25 +9,24 @@ import type { QueryFilter, Todos, Counters } from "../types/Todos.js";
 
 export default function HomePage() {
   const [tasks, setTasks] = useState<Todos>(); //tasks
-  const [queryFilter, setQueryFilter] = useState<QueryFilter>("all"); //query param for filtration
+  const [queryFilter, setQueryFilter] = useState<QueryFilter>("backlog"); //query param for filtration
   const [counterData, setCounterData] = useState<Counters>(); //data for counters
 
   async function fetchData(): Promise<void> {
     try {
-      const data: Todos = await fetchTasks(queryFilter);
-      setTasks(data);
-
-      if (data === undefined) {
-        setCounterData({
-          all: 0,
-          inWork: 0,
-          completed: 0,
-        });
+      const response = await fetchTasks(queryFilter);
+      if (response === undefined) {
+        fetchData;
       } else {
-        setCounterData(data.info); //counters
+        setTasks(response);
+        setCounterData(response.meta.statusCounts);
       }
     } catch (error) {
-      alert(`Failed to update, ${error}`);
+      if (axios.isAxiosError(error)) {
+        console.error("HTTP error", error.response?.status, error.message);
+      } else {
+        console.log(`Failed to fetch tasks! ${error}`);
+      }
     }
   }
 
@@ -37,7 +37,7 @@ export default function HomePage() {
   }, [queryFilter]);
 
   return (
-    <div className="main-container">
+    <div>
       <AddTask handleUpdate={fetchData} />
       <TaskFilter
         taskCounter={counterData}
